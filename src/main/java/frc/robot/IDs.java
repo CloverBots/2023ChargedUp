@@ -26,9 +26,14 @@ public final class IDs {
   public static final Port AHRS_PORT_ID = Port.kMXP;
 
   // Beam
-  public static final double BEAM_BALANACED_DRIVE_KP = 0.005; //.015, lower = slower, as weight goes up number needs to go up
+  public static final double BEAM_BALANACED_DRIVE_KP = 0.005; // .015, as weight goes up number should go up
   public static final double BEAM_BALANCED_GOAL_DEGREES = 0;
   public static final double BEAM_BALANCED_ANGLE_THRESHOLD_DEGREES = 1;
   public static final double BACKWARDS_BALANCING_EXTRA_POWER_MULTIPLIER = 1.35;
+
+  // Pneumatics
+  public static final int PCM_ID = 1;
+  public static final int TEST_SOLENOID1_FORWARD = 11; // TODO change to correct value
+  public static final int TEST_SOLENOID1_REVERSE = 12; // TODO change to correct value
 
 }

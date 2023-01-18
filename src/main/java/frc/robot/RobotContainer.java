@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.LiftCommand;
 import frc.robot.commands.LimeLightTestCommand;
 import frc.robot.subsystems.LiftSubsystem;
+import frc.robot.subsystems.PneumaticsSubsystem;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
@@ -34,8 +35,8 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
  */
 public class RobotContainer {
   private static final double VISION_TARGET_HEIGHT = 34; // inches
-  private static final double CAMERA_HEIGHT = 21.25; 
-  private static final double CAMERA_PITCH = 0; //degrees
+  private static final double CAMERA_HEIGHT = 21.25;
+  private static final double CAMERA_PITCH = 0; // degrees
 
   private static final double speed = -.1;
   private static final double timeoutInSeconds = 3;
@@ -52,6 +53,8 @@ public class RobotContainer {
 
   private final DriveSubsystem driveSubsystem = new DriveSubsystem();
 
+  private final PneumaticsSubsystem pneumaticsSubsystem = new PneumaticsSubsystem();
+
   private final LiftSubsystem liftSubsystem = new LiftSubsystem();
 
   private final LiftCommand liftCommand = new LiftCommand(liftSubsystem, operatorController::getLeftTriggerAxis,
@@ -66,18 +69,23 @@ public class RobotContainer {
       driverController::getRightX,
       driverController::getLeftTriggerAxis);
 
+  private final RobotLifecycleCallbacks[] robotLifecycleCallbacks = new RobotLifecycleCallbacks[] {
+        driveSubsystem,
+        pneumaticsSubsystem
+     };
+
   private final SendableChooser<Command> chooser = new SendableChooser<>();
 
-  private final AutoCommand autoCommand = new AutoCommand(driveSubsystem, intakeSubsystem, liftSubsystem, visionTargetTracker);
+  private final AutoCommand autoCommand = new AutoCommand(driveSubsystem, intakeSubsystem, liftSubsystem,
+      visionTargetTracker);
   private final AutoCommand2 autoCommand2 = new AutoCommand2(driveSubsystem, intakeSubsystem);
-
 
   public RobotContainer() {
     driveSubsystem.setDefaultCommand(driveFromController);
     liftSubsystem.setDefaultCommand(liftCommand);
     configureButtonBindings();
     configureChooserModes();
-    
+
     visionTargetTracker.setLedMode(LedMode.FORCE_ON);
 
     SmartDashboard.putNumber("Auto Distance Inches", 270);
@@ -93,16 +101,18 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
-    JoystickTrigger startIntakeTrigger = new JoystickTrigger(operatorController, XboxController.Axis.kRightTrigger.value);
+    JoystickTrigger startIntakeTrigger = new JoystickTrigger(operatorController,
+        XboxController.Axis.kRightTrigger.value);
     startIntakeTrigger.whileHeld(new IntakeCommand(intakeSubsystem, operatorController::getRightTriggerAxis));
     JoystickButton reverseIntakeButton = new JoystickButton(operatorController, XboxController.Button.kY.value);
     reverseIntakeButton.whileHeld(new IntakeCommand(intakeSubsystem, operatorController::getYButton));
-    //JoystickButton limeLightTestButton = new JoystickButton(operatorController, XboxController.Button.kA.value); 
-    //limeLightTestButton.whileHeld(new LimeLightTestCommand(visionTargetTracker));
-    
+    // JoystickButton limeLightTestButton = new JoystickButton(operatorController,
+    // XboxController.Button.kA.value);
+    // limeLightTestButton.whileHeld(new LimeLightTestCommand(visionTargetTracker));
+
     JoystickButton balance = new JoystickButton(driverController, XboxController.Button.kB.value);
     balance.whileHeld(new AutoBalanceCommand(driveSubsystem));
-    
+
     JoystickButton driveToCollisionButton = new JoystickButton(operatorController, XboxController.Button.kB.value);
     driveToCollisionButton.whenReleased(new DriveToCollisionCommand(driveSubsystem, speed, timeoutInSeconds));
   }
@@ -124,5 +134,9 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     return chooser.getSelected();
+  }
+
+  public RobotLifecycleCallbacks[] getLifecycleCallbacks() {
+    return robotLifecycleCallbacks;
   }
 }
