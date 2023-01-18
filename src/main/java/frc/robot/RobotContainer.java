@@ -20,7 +20,9 @@ import frc.robot.subsystems.IntakeSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.LiftCommand;
 import frc.robot.commands.LimeLightTestCommand;
+import frc.robot.commands.TriMotorTestCommand;
 import frc.robot.subsystems.LiftSubsystem;
+import frc.robot.subsystems.LiftSubsystem2;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
@@ -53,6 +55,7 @@ public class RobotContainer {
   private final DriveSubsystem driveSubsystem = new DriveSubsystem();
 
   private final LiftSubsystem liftSubsystem = new LiftSubsystem();
+  private final LiftSubsystem2 liftSubsystem2 = new LiftSubsystem2();
 
   private final LiftCommand liftCommand = new LiftCommand(liftSubsystem, operatorController::getLeftTriggerAxis,
       operatorController::getLeftY);
@@ -105,6 +108,9 @@ public class RobotContainer {
     
     JoystickButton driveToCollisionButton = new JoystickButton(operatorController, XboxController.Button.kB.value);
     driveToCollisionButton.whenReleased(new DriveToCollisionCommand(driveSubsystem, speed, timeoutInSeconds));
+
+    JoystickButton triMotorButton = new JoystickButton(driverController, XboxController.Button.kX.value);
+    triMotorButton.whenReleased(new TriMotorTestCommand(liftSubsystem, liftSubsystem2));
   }
 
   private void configureChooserModes() {
