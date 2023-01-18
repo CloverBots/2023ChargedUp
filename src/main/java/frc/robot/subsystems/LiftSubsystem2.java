@@ -63,4 +63,8 @@ public class LiftSubsystem2 extends SubsystemBase implements LiftObserver {
   public void resetEncoder() {
     winch1.getEncoder().setPosition(0);
   }
+
+  public CANSparkMax getMotor() {
+    return winch1;
+  }
 }

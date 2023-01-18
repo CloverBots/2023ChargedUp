@@ -110,7 +110,7 @@ public class RobotContainer {
     driveToCollisionButton.whenReleased(new DriveToCollisionCommand(driveSubsystem, speed, timeoutInSeconds));
 
     JoystickButton triMotorButton = new JoystickButton(driverController, XboxController.Button.kX.value);
-    triMotorButton.whenReleased(new TriMotorTestCommand(liftSubsystem, liftSubsystem2));
+    triMotorButton.whenReleased(new TriMotorTestCommand(liftSubsystem, liftSubsystem2, 2, 90, 45));
   }
 
   private void configureChooserModes() {
