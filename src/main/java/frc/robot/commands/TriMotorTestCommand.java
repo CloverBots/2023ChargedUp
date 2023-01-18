@@ -29,15 +29,12 @@ public class TriMotorTestCommand extends CommandBase {
     private static final double KI = 0;
     private static final double KD = 0;
     
-    private static PIDController RPMPidController = new PIDController(KP, KI, KD);
-
     public TriMotorTestCommand(LiftSubsystem liftSubsystem, LiftSubsystem2 liftSubsystem2, double seconds, double ... motorRotationValues) {
         motorsToRotate = new MotorRotationInfo[motorRotationValues.length];
         
         motorsToRotate[0] = new MotorRotationInfo(liftSubsystem.getMotor());
         motorsToRotate[1] = new MotorRotationInfo(liftSubsystem2.getMotor());
-
-        for (int i=0; i<2; i++) {
+        for (int i=0; i<motorsToRotate.length; i++) {
             motorsToRotate[i].setRotation(motorRotationValues[i], seconds);
         }
 
@@ -56,8 +53,7 @@ public class TriMotorTestCommand extends CommandBase {
     public void execute() {
 
         for (MotorRotationInfo info : motorsToRotate) {
-            RPMPidController.setSetpoint(info.reqRPM);
-            double calculated = RPMPidController.calculate(info.motor.getEncoder().getVelocity());
+            double calculated = info.RPMPidController.calculate(info.motor.getEncoder().getVelocity());
             System.out.println(calculated);
             info.motor.set(info.motor.get() + calculated);
         }
@@ -80,8 +76,8 @@ public class TriMotorTestCommand extends CommandBase {
         // System.out.println("lift 0: "+liftSubsystem.getLiftEncoderPosition());
         // System.out.println("lift 1: "+liftSubsystem2.getLiftEncoderPosition());
         
-        for (int i=0; i<motorsToRotate.length;) {
-            System.out.printf("Motor %d: %f\n", i, motorsToRotate[i].motor.getEncoder().getPosition());
+        for (int i=0; i<motorsToRotate.length; i++) {
+            System.out.printf("Motor %d: %s\n", i, motorsToRotate[i].toString());
         }
         for (MotorRotationInfo info : motorsToRotate) {
             double pos = info.motor.getEncoder().getPosition();
@@ -117,6 +113,7 @@ public class TriMotorTestCommand extends CommandBase {
         double secondsToRun;
         double initialEncoderVal;
         double reqRPM;
+        PIDController RPMPidController = new PIDController(KP, KI, KD);
 
         public MotorRotationInfo(CANSparkMax motor) {
             this.motor = motor;
@@ -124,10 +121,17 @@ public class TriMotorTestCommand extends CommandBase {
 
         public MotorRotationInfo setRotation(double degrees, double seconds) {
             this.degrees = degrees;
-            tickEndpoint = -(DriveSubsystem.ENCODER_TICKS_PER_ROTATION * degrees / 360);
+            secondsToRun = seconds;
+            tickEndpoint = (DriveSubsystem.ENCODER_TICKS_PER_ROTATION * degrees / 360);
             initialEncoderVal = motor.getEncoder().getPosition();
             reqRPM = (degrees/360) * 60 / secondsToRun;
+            RPMPidController.setSetpoint(reqRPM);
             return this;
+        }
+
+        @Override
+        public String toString() {
+            return String.format("Degrees: %f, Endpoint: %f, initialEncode: %f, RPM: %f", degrees, tickEndpoint, initialEncoderVal, reqRPM);
         }
     }
     
