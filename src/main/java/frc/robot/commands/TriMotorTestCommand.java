@@ -3,6 +3,7 @@ package frc.robot.commands;
 import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.LiftSubsystem;
@@ -24,11 +25,12 @@ public class TriMotorTestCommand extends CommandBase {
     // private double initialEncoder1 = -1;
     // private double initialEncoder2 = -1;
 
+    private static final double POWER_TO_RPM_CONSTANT = 5898.98920859685;
 
     private static final double KP = 0.002;
     private static final double KI = 0;
     private static final double KD = 0;
-    
+    private static final Timer timer = new Timer();
     public TriMotorTestCommand(LiftSubsystem liftSubsystem, LiftSubsystem2 liftSubsystem2, double seconds, double ... motorRotationValues) {
         motorsToRotate = new MotorRotationInfo[motorRotationValues.length];
         
@@ -43,6 +45,10 @@ public class TriMotorTestCommand extends CommandBase {
     @Override
     public void initialize() {
         System.out.println("Initialize xxxxxxxxxxxxxxxxxxx");
+        for (MotorRotationInfo info : motorsToRotate) {info.motor.set(0.1);
+        System.out.println(info.reqRPM/POWER_TO_RPM_CONSTANT);}
+        timer.reset();
+        timer.start();
         // initialEncoder1 = liftSubsystem.getLiftEncoderPosition();
         // initialEncoder2 = liftSubsystem2.getLiftEncoderPosition();
         // motor1Run = true;
@@ -53,9 +59,7 @@ public class TriMotorTestCommand extends CommandBase {
     public void execute() {
 
         for (MotorRotationInfo info : motorsToRotate) {
-            double calculated = info.RPMPidController.calculate(info.motor.getEncoder().getVelocity());
-            System.out.println(calculated);
-            info.motor.set(info.motor.get() + calculated);
+            info.motor.set(info.reqRPM/POWER_TO_RPM_CONSTANT);
         }
 
         // if (motor1Run) {
@@ -68,17 +72,44 @@ public class TriMotorTestCommand extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        
+        for (MotorRotationInfo info : motorsToRotate) {
+            info.motor.set(0);
+        }
     }
+
+    private double proportionalTest() {
+        double[] velocities = new double[10];
+        int n = 0;
+        while (n<10) {
+            MotorRotationInfo info = motorsToRotate[0];
+            double tRound = (Math.floor(timer.get()*10))/10.0;
+            if ( tRound % 1 == 0 && (tRound-1 == n)) {
+                double v = info.motor.getEncoder().getVelocity();
+                velocities[n] = v;
+                System.out.println("Power: "+info.motor.get()+", Velocity: "+v);
+                n++;
+                info.motor.set((n+1)/10.0);
+            }
+            //System.out.printf("Motor %d: %f\n", i, motorsToRotate[i].motor.getEncoder().getPosition());
+        }
+        System.out.println(velocities);
+        double[] ks = new double[10];
+        for (int i=0; i<10; i++) {
+            double v = velocities[i];
+            ks[i] = v/((i+1)/10.0);
+        }
+        double sum = 0;
+        for (double s : ks) {sum += s;}
+        sum /=10;
+        return sum;
+    }
+
 
     @Override
     public boolean isFinished() {
         // System.out.println("lift 0: "+liftSubsystem.getLiftEncoderPosition());
         // System.out.println("lift 1: "+liftSubsystem2.getLiftEncoderPosition());
         
-        for (int i=0; i<motorsToRotate.length; i++) {
-            System.out.printf("Motor %d: %s\n", i, motorsToRotate[i].toString());
-        }
         for (MotorRotationInfo info : motorsToRotate) {
             double pos = info.motor.getEncoder().getPosition();
             if (pos <= info.tickEndpoint + info.initialEncoderVal) {
@@ -87,9 +118,8 @@ public class TriMotorTestCommand extends CommandBase {
             }
         }
 
-        // Continues the command if any of the motors are running.
-        for (MotorRotationInfo info : motorsToRotate) if (info.isRunning) return false;
-
+        // // Continues the command if any of the motors are running.
+        // for (MotorRotationInfo info : motorsToRotate) if (info.isRunning) return false;
         return true;
 
         // if (liftSubsystem.getLiftEncoderPosition() <= MOTOR_0_ENDPOINT + initialEncoder1) {
@@ -113,7 +143,6 @@ public class TriMotorTestCommand extends CommandBase {
         double secondsToRun;
         double initialEncoderVal;
         double reqRPM;
-        PIDController RPMPidController = new PIDController(KP, KI, KD);
 
         public MotorRotationInfo(CANSparkMax motor) {
             this.motor = motor;
@@ -125,7 +154,6 @@ public class TriMotorTestCommand extends CommandBase {
             tickEndpoint = (DriveSubsystem.ENCODER_TICKS_PER_ROTATION * degrees / 360);
             initialEncoderVal = motor.getEncoder().getPosition();
             reqRPM = (degrees/360) * 60 / secondsToRun;
-            RPMPidController.setSetpoint(reqRPM);
             return this;
         }
 
