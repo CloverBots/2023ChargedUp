@@ -5,13 +5,11 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
-
-import static edu.wpi.first.wpilibj.util.ErrorMessages.requireNonNullParam;
-
-import edu.wpi.first.wpilibj2.command.button.Button;
+import edu.wpi.first.util.ErrorMessages;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /** Add your docs here. */
-public class JoystickTrigger extends Button {
+public class JoystickTrigger extends Trigger {
     private final GenericHID m_joystick;
     private final int m_joystickAxis;
   
@@ -21,8 +19,9 @@ public class JoystickTrigger extends Button {
      * @param joystick The GenericHID object that has the axis (e.g. Joystick, KinectStick, etc)
      * @param axis The axis number (see {@link GenericHID#getRawAxis(int) }
      */
+    //public JoystickTrigger(GenericHID joystick, int axis) {
     public JoystickTrigger(GenericHID joystick, int axis) {
-      requireNonNullParam(joystick, "joystick", "JoystickTrigger");
+      ErrorMessages.requireNonNullParam(joystick, "joystick", "JoystickTrigger");
   
       m_joystick = joystick;
       m_joystickAxis = axis;
@@ -33,7 +32,7 @@ public class JoystickTrigger extends Button {
      *
      * @return If joystick axis is greater than 0.1
      */
-    @Override
+
     public boolean get() {
       return m_joystick.getRawAxis(m_joystickAxis) > 0.1 ;
 

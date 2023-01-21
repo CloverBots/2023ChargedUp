@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -23,7 +24,7 @@ import frc.robot.commands.LimeLightTestCommand;
 import frc.robot.commands.TriMotorTestCommand;
 import frc.robot.subsystems.LiftSubsystem;
 import frc.robot.subsystems.LiftSubsystem2;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -78,7 +79,7 @@ public class RobotContainer {
   public RobotContainer() {
     driveSubsystem.setDefaultCommand(driveFromController);
     liftSubsystem.setDefaultCommand(liftCommand);
-    configureButtonBindings();
+    configureTriggerBindings();
     configureChooserModes();
     
     visionTargetTracker.setLedMode(LedMode.FORCE_ON);
@@ -92,25 +93,28 @@ public class RobotContainer {
    * instantiating a {@link GenericHID} or one of its subclasses ({@link
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing
    * it to a {@link
-   * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configureButtonBindings() {
+  private void configureTriggerBindings() {
 
     JoystickTrigger startIntakeTrigger = new JoystickTrigger(operatorController, XboxController.Axis.kRightTrigger.value);
-    startIntakeTrigger.whileHeld(new IntakeCommand(intakeSubsystem, operatorController::getRightTriggerAxis));
-    JoystickButton reverseIntakeButton = new JoystickButton(operatorController, XboxController.Button.kY.value);
-    reverseIntakeButton.whileHeld(new IntakeCommand(intakeSubsystem, operatorController::getYButton));
+    startIntakeTrigger.whileTrue(new IntakeCommand(intakeSubsystem, operatorController::getRightTriggerAxis));
+    JoystickTrigger reverseIntakeTrigger = new JoystickTrigger(operatorController, XboxController.Button.kY.value);
+    reverseIntakeTrigger.whileTrue(new IntakeCommand(intakeSubsystem, operatorController::getYButton));
     //JoystickButton limeLightTestButton = new JoystickButton(operatorController, XboxController.Button.kA.value); 
     //limeLightTestButton.whileHeld(new LimeLightTestCommand(visionTargetTracker));
     
-    JoystickButton balance = new JoystickButton(driverController, XboxController.Button.kB.value);
-    balance.whileHeld(new AutoBalanceCommand(driveSubsystem));
     
-    JoystickButton driveToCollisionButton = new JoystickButton(operatorController, XboxController.Button.kB.value);
-    driveToCollisionButton.whenReleased(new DriveToCollisionCommand(driveSubsystem, speed, timeoutInSeconds));
+    JoystickTrigger balance = new JoystickTrigger(driverController, XboxController.Button.kB.value);
+    balance.whileTrue(new AutoBalanceCommand(driveSubsystem));
+    
+    JoystickTrigger driveToCollisionTrigger = new JoystickTrigger(operatorController, XboxController.Button.kB.value);
+    driveToCollisionTrigger.onFalse(new DriveToCollisionCommand(driveSubsystem, speed, timeoutInSeconds));
 
-    JoystickButton triMotorButton = new JoystickButton(driverController, XboxController.Button.kX.value);
-    triMotorButton.whenReleased(new TriMotorTestCommand(liftSubsystem, liftSubsystem2, 2, 90, 45));
+    JoystickTrigger triMotorTrigger = new JoystickTrigger(driverController, XboxController.Button.kX.value);
+    triMotorTrigger.onFalse(new TriMotorTestCommand(liftSubsystem, liftSubsystem2, 2, 90, 45));
+    
+
+    
   }
 
   private void configureChooserModes() {
