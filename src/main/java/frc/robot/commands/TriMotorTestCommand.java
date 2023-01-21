@@ -45,8 +45,11 @@ public class TriMotorTestCommand extends CommandBase {
     @Override
     public void initialize() {
         System.out.println("Initialize xxxxxxxxxxxxxxxxxxx");
-        for (MotorRotationInfo info : motorsToRotate) {info.motor.set(0.1);
-        System.out.println(info.reqRPM/POWER_TO_RPM_CONSTANT);}
+        for (MotorRotationInfo info : motorsToRotate) {
+            System.out.println("factor "+info.motor.getEncoder().getVelocityConversionFactor());
+            info.motor.set(0.1);
+            System.out.println(info.reqRPM/POWER_TO_RPM_CONSTANT);
+        }
         timer.reset();
         timer.start();
         // initialEncoder1 = liftSubsystem.getLiftEncoderPosition();
@@ -80,14 +83,16 @@ public class TriMotorTestCommand extends CommandBase {
     private double proportionalTest() {
         double[] velocities = new double[10];
         int n = 0;
+        motorsToRotate[0].motor.getEncoder().setPosition(0);
         while (n<10) {
             MotorRotationInfo info = motorsToRotate[0];
             double tRound = (Math.floor(timer.get()*10))/10.0;
             if ( tRound % 1 == 0 && (tRound-1 == n)) {
-                double v = info.motor.getEncoder().getVelocity();
+                double v = info.motor.getEncoder().getPosition() / DriveSubsystem.ENCODER_TICKS_PER_ROTATION;
                 velocities[n] = v;
                 System.out.println("Power: "+info.motor.get()+", Velocity: "+v);
                 n++;
+                info.motor.getEncoder().setPosition(0);
                 info.motor.set((n+1)/10.0);
             }
             //System.out.printf("Motor %d: %f\n", i, motorsToRotate[i].motor.getEncoder().getPosition());
