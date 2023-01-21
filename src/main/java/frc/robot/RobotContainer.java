@@ -104,14 +104,14 @@ public class RobotContainer {
     //limeLightTestButton.whileHeld(new LimeLightTestCommand(visionTargetTracker));
     
     
-    JoystickTrigger balance = new JoystickTrigger(driverController, XboxController.Button.kB.value);
+    JoystickButton balance = new JoystickButton(driverController, XboxController.Button.kB.value);
     balance.whileTrue(new AutoBalanceCommand(driveSubsystem));
     
-    JoystickTrigger driveToCollisionTrigger = new JoystickTrigger(operatorController, XboxController.Button.kB.value);
-    driveToCollisionTrigger.onFalse(new DriveToCollisionCommand(driveSubsystem, speed, timeoutInSeconds));
+    JoystickButton driveToCollisionButton = new JoystickButton(operatorController, XboxController.Button.kB.value);
+    driveToCollisionButton.onFalse(new DriveToCollisionCommand(driveSubsystem, speed, timeoutInSeconds));
 
-    JoystickTrigger triMotorTrigger = new JoystickTrigger(driverController, XboxController.Button.kX.value);
-    triMotorTrigger.onFalse(new TriMotorTestCommand(liftSubsystem, liftSubsystem2, 2, 90, 45));
+    JoystickButton triMotorButton = new JoystickButton(driverController, XboxController.Button.kX.value);
+    triMotorButton.onFalse(new TriMotorTestCommand(liftSubsystem, liftSubsystem2, 2, 90, 45));
     
 
     
