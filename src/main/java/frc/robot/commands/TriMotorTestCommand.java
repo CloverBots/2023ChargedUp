@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import com.playingwithfusion.TimeOfFlight;
 import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -15,6 +16,7 @@ public class TriMotorTestCommand extends CommandBase {
     // private LiftSubsystem2 liftSubsystem2;
     
     private MotorRotationInfo[] motorsToRotate;
+    private TimeOfFlight timeOfFlight;
 
     // private static final double MOTOR_0_ENDPOINT = -40;
     // private static final double MOTOR_1_ENDPOINT = -20;
@@ -39,12 +41,13 @@ public class TriMotorTestCommand extends CommandBase {
         for (int i=0; i<motorsToRotate.length; i++) {
             motorsToRotate[i].setRotation(motorRotationValues[i], seconds);
         }
-
+        timeOfFlight= new TimeOfFlight(0);
     }
 
     @Override
     public void initialize() {
         System.out.println("Initialize xxxxxxxxxxxxxxxxxxx");
+        /**
         for (MotorRotationInfo info : motorsToRotate) {
             System.out.println("factor "+info.motor.getEncoder().getVelocityConversionFactor());
             info.motor.set(0.1);
@@ -56,14 +59,17 @@ public class TriMotorTestCommand extends CommandBase {
         // initialEncoder2 = liftSubsystem2.getLiftEncoderPosition();
         // motor1Run = true;
         // motor2Run = true;
+        */
     }
 
     @Override
     public void execute() {
 
-        for (MotorRotationInfo info : motorsToRotate) {
-            info.motor.set(info.reqRPM/POWER_TO_RPM_CONSTANT);
-        }
+        //for (MotorRotationInfo info : motorsToRotate) {
+         //   info.motor.set(info.reqRPM/POWER_TO_RPM_CONSTANT);
+        //}
+            System.out.println(timeOfFlight.getRange());
+
 
         // if (motor1Run) {
         //     liftSubsystem.setLiftSpeed(0.1);
@@ -112,6 +118,8 @@ public class TriMotorTestCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
+        return false;
+        /**
         // System.out.println("lift 0: "+liftSubsystem.getLiftEncoderPosition());
         // System.out.println("lift 1: "+liftSubsystem2.getLiftEncoderPosition());
         
@@ -138,6 +146,7 @@ public class TriMotorTestCommand extends CommandBase {
         // } 
 
         // return !motor1Run && !motor2Run;
+        */
     }
 
     private static class MotorRotationInfo {

@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -110,7 +111,7 @@ public class RobotContainer {
     JoystickTrigger driveToCollisionTrigger = new JoystickTrigger(operatorController, XboxController.Button.kB.value);
     driveToCollisionTrigger.onFalse(new DriveToCollisionCommand(driveSubsystem, speed, timeoutInSeconds));
 
-    JoystickTrigger triMotorTrigger = new JoystickTrigger(driverController, XboxController.Button.kX.value);
+    JoystickButton triMotorTrigger = new JoystickButton(driverController, XboxController.Button.kX.value);
     triMotorTrigger.onFalse(new TriMotorTestCommand(liftSubsystem, liftSubsystem2, 2, 90, 45));
     
 
