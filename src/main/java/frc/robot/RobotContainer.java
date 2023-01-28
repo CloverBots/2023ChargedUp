@@ -22,9 +22,9 @@ import frc.robot.commands.ArmCommand;
 import frc.robot.commands.AutoAlignCommand;
 import frc.robot.commands.LimeLightTestCommand;
 import frc.robot.commands.TriMotorTestCommand;
+import frc.robot.commands.WristCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.WristSubsystem;
-
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -37,8 +37,8 @@ import frc.robot.subsystems.WristSubsystem;
  */
 public class RobotContainer {
   private static final double VISION_TARGET_HEIGHT = 34; // inches
-  private static final double CAMERA_HEIGHT = 21.25; 
-  private static final double CAMERA_PITCH = 0; //degrees
+  private static final double CAMERA_HEIGHT = 21.25;
+  private static final double CAMERA_PITCH = 0; // degrees
 
   private static final double speed = -.1;
   private static final double timeoutInSeconds = 3;
@@ -61,6 +61,9 @@ public class RobotContainer {
   private final ArmCommand armCommand = new ArmCommand(armSubsystem, operatorController::getLeftTriggerAxis,
       operatorController::getLeftY);
 
+  private final WristCommand wristCommand = new WristCommand(wristSubsystem, operatorController::getLeftTriggerAxis,
+      operatorController::getLeftY);
+
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
 
   private final DriveFromControllerCommand driveFromController = new DriveFromControllerCommand(
@@ -73,13 +76,12 @@ public class RobotContainer {
 
   private final AutoCommand2 autoCommand2 = new AutoCommand2(driveSubsystem, intakeSubsystem);
 
-
   public RobotContainer() {
     driveSubsystem.setDefaultCommand(driveFromController);
     armSubsystem.setDefaultCommand(armCommand);
     configureTriggerBindings();
     configureChooserModes();
-    
+
     visionTargetTracker.setLedMode(LedMode.FORCE_ON);
 
     SmartDashboard.putNumber("Auto Distance Inches", 270);
@@ -94,29 +96,39 @@ public class RobotContainer {
    */
   private void configureTriggerBindings() {
 
-    JoystickTrigger startIntakeTrigger = new JoystickTrigger(operatorController, XboxController.Axis.kRightTrigger.value);
+    JoystickTrigger startIntakeTrigger = new JoystickTrigger(operatorController,
+        XboxController.Axis.kRightTrigger.value);
     startIntakeTrigger.whileTrue(new IntakeCommand(intakeSubsystem, operatorController::getRightTriggerAxis));
+
     JoystickTrigger reverseIntakeTrigger = new JoystickTrigger(operatorController, XboxController.Button.kY.value);
     reverseIntakeTrigger.whileTrue(new IntakeCommand(intakeSubsystem, operatorController::getYButton));
-    //JoystickButton limeLightTestButton = new JoystickButton(operatorController, XboxController.Button.kA.value); 
-    //limeLightTestButton.whileHeld(new LimeLightTestCommand(visionTargetTracker));
-    
-    
+
+    // JoystickButton limeLightTestButton = new JoystickButton(operatorController,
+    // XboxController.Button.kA.value);
+    // limeLightTestButton.whileHeld(new LimeLightTestCommand(visionTargetTracker));
+
     JoystickButton balance = new JoystickButton(driverController, XboxController.Button.kB.value);
     balance.whileTrue(new AutoBalanceCommand(driveSubsystem));
-    
+
     JoystickButton driveToCollisionButton = new JoystickButton(operatorController, XboxController.Button.kB.value);
     driveToCollisionButton.onFalse(new DriveToCollisionCommand(driveSubsystem, speed, timeoutInSeconds));
 
     JoystickTrigger armTrigger = new JoystickTrigger(operatorController, XboxController.Axis.kLeftTrigger.value);
-    armTrigger.whileTrue(new ArmCommand(armSubsystem, operatorController::getLeftTriggerAxis, operatorController::getLeftY));
+    armTrigger
+        .whileTrue(new ArmCommand(armSubsystem, operatorController::getLeftTriggerAxis, operatorController::getLeftY));
+
+    JoystickTrigger wristTrigger = new JoystickTrigger(operatorController, XboxController.Axis.kLeftTrigger.value);
+    wristTrigger.whileTrue(
+        new WristCommand(wristSubsystem, operatorController::getLeftTriggerAxis, operatorController::getRightY));
 
     JoystickButton alignButton = new JoystickButton(operatorController, XboxController.Button.kA.value);
     alignButton.whileTrue(new AutoAlignCommand(driveSubsystem, visionTargetTracker, 2));
 
-    //JoystickButton triMotorButton = new JoystickButton(driverController, XboxController.Button.kX.value);
-    //triMotorButton.onFalse(new TriMotorTestCommand(liftSubsystem, liftSubsystem2, 2, 90, 45));
-    
+    // JoystickButton triMotorButton = new JoystickButton(driverController,
+    // XboxController.Button.kX.value);
+    // triMotorButton.onFalse(new TriMotorTestCommand(liftSubsystem, liftSubsystem2,
+    // 2, 90, 45));
+
   }
 
   private void configureChooserModes() {

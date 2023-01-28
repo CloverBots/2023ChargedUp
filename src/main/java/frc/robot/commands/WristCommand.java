@@ -8,24 +8,24 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.WristSubsystem;
 
-public class ArmCommand extends CommandBase {
-  private final ArmSubsystem armSubsystem;
+public class WristCommand extends CommandBase {
+  private final WristSubsystem wristSubsystem;
   private final DoubleSupplier trigger;
   private final DoubleSupplier leftJoystickY;
   public static final double UPPER_ENDPOINT = 87; // in rotations
   private final double LOWER_ENDPOINT = 0.0;
   private final double APPROACH_MAX_SPEED = 0.2;
 
-  /** Creates a new ArmCommand. */
-  public ArmCommand(ArmSubsystem armSubsystem, DoubleSupplier trigger, DoubleSupplier leftJoystickY) {
-    this.armSubsystem = armSubsystem;
+  /** Creates a new LiftCommand. */
+  public WristCommand(WristSubsystem wristSubsystem, DoubleSupplier trigger, DoubleSupplier leftJoystickY) {
+    this.wristSubsystem = wristSubsystem;
     this.trigger = trigger;
     this.leftJoystickY = leftJoystickY;
 
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(armSubsystem);
+    addRequirements(wristSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -38,29 +38,29 @@ public class ArmCommand extends CommandBase {
   @Override
   public void execute() {
 
-    SmartDashboard.putNumber("elevator height", armSubsystem.getArmEncoderPosition());
+    SmartDashboard.putNumber("Wrist", wristSubsystem.getWristEncoderPosition());
 
     if (trigger.getAsDouble() > .5) {
-      double armSpeed = leftJoystickY.getAsDouble() * .5;
+      double wristSpeed = leftJoystickY.getAsDouble() * .5;
 
-      if ((armSubsystem.getArmEncoderPosition() <= LOWER_ENDPOINT && armSpeed > 0) ||
-          (armSubsystem.getArmEncoderPosition() >= UPPER_ENDPOINT && armSpeed < 0)) {
-        armSpeed = 0;
+      if ((wristSubsystem.getWristEncoderPosition() <= LOWER_ENDPOINT && wristSpeed > 0) ||
+          (wristSubsystem.getWristEncoderPosition() >= UPPER_ENDPOINT && wristSpeed < 0)) {
+        wristSpeed = 0;
       }
 
-      if (armSubsystem.getArmEncoderPosition() - LOWER_ENDPOINT < 3
-          || UPPER_ENDPOINT - armSubsystem.getArmEncoderPosition() < 3) {
-        armSpeed = Math.min(Math.max(armSpeed, -APPROACH_MAX_SPEED), APPROACH_MAX_SPEED);
+      if (wristSubsystem.getWristEncoderPosition() - LOWER_ENDPOINT < 3
+          || UPPER_ENDPOINT - wristSubsystem.getWristEncoderPosition() < 3) {
+        wristSpeed = Math.min(Math.max(wristSpeed, -APPROACH_MAX_SPEED), APPROACH_MAX_SPEED);
       }
       
-        armSubsystem.setArmSpeed(armSpeed);
+        wristSubsystem.setWristSpeed(wristSpeed);
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    armSubsystem.setArmSpeed(0);
+    wristSubsystem.setWristSpeed(0);
   }
 
   // Returns true when the command should end.

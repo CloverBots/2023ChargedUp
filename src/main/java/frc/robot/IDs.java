@@ -19,11 +19,11 @@ public final class IDs {
   // Telescope
   public static final int TELESCOPE_DEVICE = 6;
 
-  // Lift
+  // Arm, Wrist
   public static final int LIFT_UPPER_SWITCH = 9;
   public static final int LIFT_LOWER_SWITCH = 8;
   public static final int ARM_DEVICE = 8;
-  public static final int LIFT_WINCH_DEVICE1 = 9;
+  public static final int WRIST_DEVICE = 9;
 
   // NavX Gyro
   public static final Port AHRS_PORT_ID = Port.kMXP;

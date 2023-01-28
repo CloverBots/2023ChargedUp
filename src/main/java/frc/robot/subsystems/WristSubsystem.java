@@ -6,22 +6,17 @@ import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
-// import edu.wpi.first.wpilibj.DoubleSolenoid;
-// import edu.wpi.first.wpilibj.PneumaticsModuleType;
-// import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.IDs;
-import frc.robot.LiftPosition;
 
 public class WristSubsystem extends SubsystemBase {
   private final int CURRENT_LIMIT = 30; 
 
-  private final CANSparkMax winch1 = new CANSparkMax(IDs.LIFT_WINCH_DEVICE1, MotorType.kBrushless);
+  private final CANSparkMax winch1 = new CANSparkMax(IDs.WRIST_DEVICE, MotorType.kBrushless);
 
-  private LiftPosition liftPosition;
 
   /**
-   * Constructs a new {@link LiftSubsystem} instance.
+   * Constructs a new {@link WristSubsystem} instance.
    */
   public WristSubsystem() {
     winch1.setSmartCurrentLimit(CURRENT_LIMIT);
@@ -29,28 +24,21 @@ public class WristSubsystem extends SubsystemBase {
     winch1.setIdleMode(IdleMode.kBrake);
 
     winch1.setInverted(true);
-    liftPosition = LiftPosition.DOWN;
   }
 
-  public void setLiftSpeed(double speed) {
+  public void setWristSpeed(double speed) {
     winch1.set(speed);
   }
 
-  public double getLiftEncoderPosition() {
+  public double getWristEncoderPosition() {
     return -winch1.getEncoder().getPosition();
   }
 
-  public void setLiftMaximumPosition(double min, double max) {
+  public void setWristMaximumPosition(double min, double max) {
     winch1.setSoftLimit(SoftLimitDirection.kForward, (float) max);
     winch1.setSoftLimit(SoftLimitDirection.kForward, (float) min);
   }
 
-  /**
-   * Returns the position of the lift.
-   */
-  public LiftPosition getLiftPosition() {
-    return liftPosition;
-  }
 
   public Boolean getLowerSwitch() {
     return true;
