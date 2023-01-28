@@ -6,58 +6,58 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.LiftSubsystem;
+import frc.robot.subsystems.ArmSubsystem;
 
-public class LiftToPositionCommand extends CommandBase {
-  private final LiftSubsystem liftSubsystem;
-  private final double LIFT_SPEED = 0.4;
+public class ArmToPositionCommand extends CommandBase {
+  private final ArmSubsystem armSubsystem;
+  private final double ARM_SPEED = 0.4;
   private int position;
   private int direction;
 
   /** Creates a new LiftCommand. */
-  public LiftToPositionCommand(LiftSubsystem liftSubsystem, int position) {
-    this.liftSubsystem = liftSubsystem;
+  public ArmToPositionCommand(ArmSubsystem armSubsystem, int position) {
+    this.armSubsystem = armSubsystem;
 
     //Guard against too large of a position value
-    if (position > LiftCommand.UPPER_ENDPOINT) {
-      position = (int) LiftCommand.UPPER_ENDPOINT;
+    if (position > ArmCommand.UPPER_ENDPOINT) {
+      position = (int) ArmCommand.UPPER_ENDPOINT;
     }
     
     this.position = position;
 
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(liftSubsystem);
+    addRequirements(armSubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     direction = -1; // going up
-    if (liftSubsystem.getLiftEncoderPosition() > position) {
+    if (armSubsystem.getArmEncoderPosition() > position) {
       direction = 1; // going down
     }
-    SmartDashboard.putNumber("Lift starting position: ", liftSubsystem.getLiftEncoderPosition());
+    SmartDashboard.putNumber("Arm starting position: ", armSubsystem.getArmEncoderPosition());
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    SmartDashboard.putNumber("Lift position: ", liftSubsystem.getLiftEncoderPosition());
-    liftSubsystem.setLiftSpeed(LIFT_SPEED * direction);
+    SmartDashboard.putNumber("Arm position: ", armSubsystem.getArmEncoderPosition());
+    armSubsystem.setArmSpeed(ARM_SPEED * direction);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    liftSubsystem.setLiftSpeed(0);
+    armSubsystem.setArmSpeed(0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (direction == 1 && liftSubsystem.getLiftEncoderPosition() <= position) {
+    if (direction == 1 && armSubsystem.getArmEncoderPosition() <= position) {
       return true;
-    } else if (direction == -1 && liftSubsystem.getLiftEncoderPosition() >= position) {
+    } else if (direction == -1 && armSubsystem.getArmEncoderPosition() >= position) {
       return true;
     } else {
       return false;

@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.VisionTargetTracker.LedMode;
 import frc.robot.commands.AutoBalanceCommand;
-import frc.robot.commands.AutoCommand;
 import frc.robot.commands.AutoCommand2;
 import frc.robot.commands.DriveFromControllerCommand;
 import frc.robot.commands.DriveToCollisionCommand;
@@ -19,11 +18,12 @@ import frc.robot.commands.IntakeCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.commands.LiftCommand;
+import frc.robot.commands.ArmCommand;
+import frc.robot.commands.AutoAlignCommand;
 import frc.robot.commands.LimeLightTestCommand;
 import frc.robot.commands.TriMotorTestCommand;
-import frc.robot.subsystems.LiftSubsystem;
-import frc.robot.subsystems.LiftSubsystem2;
+import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.WristSubsystem;
 
 
 /**
@@ -55,30 +55,28 @@ public class RobotContainer {
 
   private final DriveSubsystem driveSubsystem = new DriveSubsystem();
 
-  private final LiftSubsystem liftSubsystem = new LiftSubsystem();
-  private final LiftSubsystem2 liftSubsystem2 = new LiftSubsystem2();
+  private final ArmSubsystem armSubsystem = new ArmSubsystem();
+  private final WristSubsystem wristSubsystem = new WristSubsystem();
 
-  private final LiftCommand liftCommand = new LiftCommand(liftSubsystem, operatorController::getLeftTriggerAxis,
+  private final ArmCommand armCommand = new ArmCommand(armSubsystem, operatorController::getLeftTriggerAxis,
       operatorController::getLeftY);
 
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
 
   private final DriveFromControllerCommand driveFromController = new DriveFromControllerCommand(
       driveSubsystem,
-      liftSubsystem,
       driverController::getLeftY,
       driverController::getRightX,
       driverController::getLeftTriggerAxis);
 
   private final SendableChooser<Command> chooser = new SendableChooser<>();
 
-  private final AutoCommand autoCommand = new AutoCommand(driveSubsystem, intakeSubsystem, liftSubsystem, visionTargetTracker);
   private final AutoCommand2 autoCommand2 = new AutoCommand2(driveSubsystem, intakeSubsystem);
 
 
   public RobotContainer() {
     driveSubsystem.setDefaultCommand(driveFromController);
-    liftSubsystem.setDefaultCommand(liftCommand);
+    armSubsystem.setDefaultCommand(armCommand);
     configureTriggerBindings();
     configureChooserModes();
     
@@ -110,10 +108,14 @@ public class RobotContainer {
     JoystickButton driveToCollisionButton = new JoystickButton(operatorController, XboxController.Button.kB.value);
     driveToCollisionButton.onFalse(new DriveToCollisionCommand(driveSubsystem, speed, timeoutInSeconds));
 
-    JoystickButton triMotorButton = new JoystickButton(driverController, XboxController.Button.kX.value);
-    triMotorButton.onFalse(new TriMotorTestCommand(liftSubsystem, liftSubsystem2, 2, 90, 45));
-    
+    JoystickTrigger armTrigger = new JoystickTrigger(operatorController, XboxController.Axis.kLeftTrigger.value);
+    armTrigger.whileTrue(new ArmCommand(armSubsystem, operatorController::getLeftTriggerAxis, operatorController::getLeftY));
 
+    JoystickButton alignButton = new JoystickButton(operatorController, XboxController.Button.kA.value);
+    alignButton.whileTrue(new AutoAlignCommand(driveSubsystem, visionTargetTracker, 2));
+
+    //JoystickButton triMotorButton = new JoystickButton(driverController, XboxController.Button.kX.value);
+    //triMotorButton.onFalse(new TriMotorTestCommand(liftSubsystem, liftSubsystem2, 2, 90, 45));
     
   }
 
@@ -122,8 +124,7 @@ public class RobotContainer {
     SmartDashboard.putData("Autonomous Mode", chooser);
     SmartDashboard.putNumber("Auto wait time", 0);
 
-    chooser.addOption("Autonomous", autoCommand);
-    chooser.setDefaultOption("Autonomous", autoCommand);
+    chooser.setDefaultOption("Autonomous", autoCommand2);
     chooser.addOption("Autonomous: Bunny", autoCommand2);
   }
 

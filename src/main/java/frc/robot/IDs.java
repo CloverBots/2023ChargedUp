@@ -16,10 +16,13 @@ public final class IDs {
   // Intake
   public static final int INTAKE_LEAD_DEVICE = 5;
 
+  // Telescope
+  public static final int TELESCOPE_DEVICE = 6;
+
   // Lift
   public static final int LIFT_UPPER_SWITCH = 9;
   public static final int LIFT_LOWER_SWITCH = 8;
-  public static final int LIFT_WINCH_DEVICE0 = 8;
+  public static final int ARM_DEVICE = 8;
   public static final int LIFT_WINCH_DEVICE1 = 9;
 
   // NavX Gyro

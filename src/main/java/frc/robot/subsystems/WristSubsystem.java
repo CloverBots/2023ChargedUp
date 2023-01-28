@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.IDs;
 import frc.robot.LiftPosition;
 
-public class LiftSubsystem2 extends SubsystemBase implements LiftObserver {
+public class WristSubsystem extends SubsystemBase {
   private final int CURRENT_LIMIT = 30; 
 
   private final CANSparkMax winch1 = new CANSparkMax(IDs.LIFT_WINCH_DEVICE1, MotorType.kBrushless);
@@ -23,7 +23,7 @@ public class LiftSubsystem2 extends SubsystemBase implements LiftObserver {
   /**
    * Constructs a new {@link LiftSubsystem} instance.
    */
-  public LiftSubsystem2() {
+  public WristSubsystem() {
     winch1.setSmartCurrentLimit(CURRENT_LIMIT);
 
     winch1.setIdleMode(IdleMode.kBrake);
