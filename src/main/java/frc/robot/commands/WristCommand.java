@@ -13,17 +13,17 @@ import frc.robot.subsystems.WristSubsystem;
 public class WristCommand extends CommandBase {
   private final WristSubsystem wristSubsystem;
   private final DoubleSupplier trigger;
-  private final DoubleSupplier leftJoystickY;
+  private final DoubleSupplier rightJoystickY;
   public static final double UPPER_ENDPOINT = 87; // in rotations
   private final double LOWER_ENDPOINT = 0.0;
   private final double APPROACH_MAX_SPEED = 0.2;
 
   /** Creates a new LiftCommand. */
-  public WristCommand(WristSubsystem wristSubsystem, DoubleSupplier trigger, DoubleSupplier leftJoystickY) {
+  public WristCommand(WristSubsystem wristSubsystem, DoubleSupplier trigger, DoubleSupplier rightJoystickY) {
     this.wristSubsystem = wristSubsystem;
     this.trigger = trigger;
-    this.leftJoystickY = leftJoystickY;
-
+    this.rightJoystickY = rightJoystickY;
+System.out.println("xxxxxxxxxxxxxxxxxxxxxx");
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(wristSubsystem);
   }
@@ -41,7 +41,7 @@ public class WristCommand extends CommandBase {
     SmartDashboard.putNumber("Wrist", wristSubsystem.getWristEncoderPosition());
 
     if (trigger.getAsDouble() > .5) {
-      double wristSpeed = leftJoystickY.getAsDouble() * .5;
+      double wristSpeed = rightJoystickY.getAsDouble() * .5;
 
       if ((wristSubsystem.getWristEncoderPosition() <= LOWER_ENDPOINT && wristSpeed > 0) ||
           (wristSubsystem.getWristEncoderPosition() >= UPPER_ENDPOINT && wristSpeed < 0)) {

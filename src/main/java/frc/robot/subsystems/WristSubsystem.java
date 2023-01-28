@@ -12,31 +12,31 @@ import frc.robot.IDs;
 public class WristSubsystem extends SubsystemBase {
   private final int CURRENT_LIMIT = 30; 
 
-  private final CANSparkMax winch1 = new CANSparkMax(IDs.WRIST_DEVICE, MotorType.kBrushless);
+  private final CANSparkMax motor = new CANSparkMax(IDs.WRIST_DEVICE, MotorType.kBrushless);
 
 
   /**
    * Constructs a new {@link WristSubsystem} instance.
    */
   public WristSubsystem() {
-    winch1.setSmartCurrentLimit(CURRENT_LIMIT);
+    motor.setSmartCurrentLimit(CURRENT_LIMIT);
 
-    winch1.setIdleMode(IdleMode.kBrake);
+    motor.setIdleMode(IdleMode.kBrake);
 
-    winch1.setInverted(true);
+    motor.setInverted(true);
   }
 
   public void setWristSpeed(double speed) {
-    winch1.set(speed);
+    motor.set(speed);
   }
 
   public double getWristEncoderPosition() {
-    return -winch1.getEncoder().getPosition();
+    return -motor.getEncoder().getPosition();
   }
 
   public void setWristMaximumPosition(double min, double max) {
-    winch1.setSoftLimit(SoftLimitDirection.kForward, (float) max);
-    winch1.setSoftLimit(SoftLimitDirection.kForward, (float) min);
+    motor.setSoftLimit(SoftLimitDirection.kForward, (float) max);
+    motor.setSoftLimit(SoftLimitDirection.kForward, (float) min);
   }
 
 
@@ -49,10 +49,10 @@ public class WristSubsystem extends SubsystemBase {
   }
 
   public void resetEncoder() {
-    winch1.getEncoder().setPosition(0);
+    motor.getEncoder().setPosition(0);
   }
 
   public CANSparkMax getMotor() {
-    return winch1;
+    return motor;
   }
 }

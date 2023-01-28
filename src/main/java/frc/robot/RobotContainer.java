@@ -62,7 +62,7 @@ public class RobotContainer {
       operatorController::getLeftY);
 
   private final WristCommand wristCommand = new WristCommand(wristSubsystem, operatorController::getLeftTriggerAxis,
-      operatorController::getLeftY);
+      operatorController::getRightY);
 
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
 
@@ -79,6 +79,7 @@ public class RobotContainer {
   public RobotContainer() {
     driveSubsystem.setDefaultCommand(driveFromController);
     armSubsystem.setDefaultCommand(armCommand);
+    wristSubsystem.setDefaultCommand(wristCommand);
     configureTriggerBindings();
     configureChooserModes();
 
@@ -114,12 +115,10 @@ public class RobotContainer {
     driveToCollisionButton.onFalse(new DriveToCollisionCommand(driveSubsystem, speed, timeoutInSeconds));
 
     JoystickTrigger armTrigger = new JoystickTrigger(operatorController, XboxController.Axis.kLeftTrigger.value);
-    armTrigger
-        .whileTrue(new ArmCommand(armSubsystem, operatorController::getLeftTriggerAxis, operatorController::getLeftY));
+    armTrigger.whileTrue(new ArmCommand(armSubsystem, operatorController::getLeftTriggerAxis, operatorController::getLeftY));
 
     JoystickTrigger wristTrigger = new JoystickTrigger(operatorController, XboxController.Axis.kLeftTrigger.value);
-    wristTrigger.whileTrue(
-        new WristCommand(wristSubsystem, operatorController::getLeftTriggerAxis, operatorController::getRightY));
+    wristTrigger.whileTrue(new WristCommand(wristSubsystem, operatorController::getLeftTriggerAxis, operatorController::getRightY));
 
     JoystickButton alignButton = new JoystickButton(operatorController, XboxController.Button.kA.value);
     alignButton.whileTrue(new AutoAlignCommand(driveSubsystem, visionTargetTracker, 2));
