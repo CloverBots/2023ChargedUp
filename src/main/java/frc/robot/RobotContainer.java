@@ -11,7 +11,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.VisionTargetTracker.LedMode;
 import frc.robot.commands.AutoBalanceCommand;
-import frc.robot.commands.AutoCommand2;
+import frc.robot.commands.AutoScoreChargeCommand;
+import frc.robot.commands.AutoScoreExitCommand;
+import frc.robot.commands.AutoWaitScoreCommand;
 import frc.robot.commands.DriveFromControllerCommand;
 import frc.robot.commands.DriveToCollisionCommand;
 import frc.robot.commands.IntakeCommand;
@@ -20,11 +22,12 @@ import frc.robot.subsystems.IntakeSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.ArmCommand;
 import frc.robot.commands.AutoAlignCommand;
-import frc.robot.commands.LimeLightTestCommand;
-import frc.robot.commands.TriMotorTestCommand;
+//import frc.robot.commands.LimeLightTestCommand;
+//import frc.robot.commands.TriMotorTestCommand;
 import frc.robot.commands.WristCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.WristSubsystem;
+import frc.robot.subsystems.TelescopeSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -57,6 +60,7 @@ public class RobotContainer {
 
   private final ArmSubsystem armSubsystem = new ArmSubsystem();
   private final WristSubsystem wristSubsystem = new WristSubsystem();
+  private final TelescopeSubsystem telescopeSubsystem = new TelescopeSubsystem();
 
   private final ArmCommand armCommand = new ArmCommand(armSubsystem, operatorController::getLeftTriggerAxis,
       operatorController::getLeftY);
@@ -73,8 +77,6 @@ public class RobotContainer {
       driverController::getLeftTriggerAxis);
 
   private final SendableChooser<Command> chooser = new SendableChooser<>();
-
-  private final AutoCommand2 autoCommand2 = new AutoCommand2(driveSubsystem, intakeSubsystem);
 
   public RobotContainer() {
     driveSubsystem.setDefaultCommand(driveFromController);
@@ -115,10 +117,12 @@ public class RobotContainer {
     driveToCollisionButton.onFalse(new DriveToCollisionCommand(driveSubsystem, speed, timeoutInSeconds));
 
     JoystickTrigger armTrigger = new JoystickTrigger(operatorController, XboxController.Axis.kLeftTrigger.value);
-    armTrigger.whileTrue(new ArmCommand(armSubsystem, operatorController::getLeftTriggerAxis, operatorController::getLeftY));
+    armTrigger
+        .whileTrue(new ArmCommand(armSubsystem, operatorController::getLeftTriggerAxis, operatorController::getLeftY));
 
     JoystickTrigger wristTrigger = new JoystickTrigger(operatorController, XboxController.Axis.kLeftTrigger.value);
-    wristTrigger.whileTrue(new WristCommand(wristSubsystem, operatorController::getLeftTriggerAxis, operatorController::getRightY));
+    wristTrigger.whileTrue(
+        new WristCommand(wristSubsystem, operatorController::getLeftTriggerAxis, operatorController::getRightY));
 
     JoystickButton alignButton = new JoystickButton(operatorController, XboxController.Button.kA.value);
     alignButton.whileTrue(new AutoAlignCommand(driveSubsystem, visionTargetTracker, 2));
@@ -133,10 +137,26 @@ public class RobotContainer {
   private void configureChooserModes() {
 
     SmartDashboard.putData("Autonomous Mode", chooser);
-    SmartDashboard.putNumber("Auto wait time", 0);
+    SmartDashboard.putNumber("Auto Wait Time", 0);
 
-    chooser.setDefaultOption("Autonomous", autoCommand2);
-    chooser.addOption("Autonomous: Bunny", autoCommand2);
+    chooser.setDefaultOption("AutoScoreChargeCommand", new AutoScoreChargeCommand(
+        armSubsystem,
+        driveSubsystem,
+        intakeSubsystem,
+        telescopeSubsystem,
+        wristSubsystem));
+    chooser.addOption("AutoScoreExitCommand", new AutoScoreExitCommand(
+        armSubsystem,
+        driveSubsystem,
+        intakeSubsystem,
+        telescopeSubsystem,
+        wristSubsystem));
+    chooser.addOption("AutoWaitScore", new AutoWaitScoreCommand(
+        armSubsystem,
+        driveSubsystem,
+        intakeSubsystem,
+        telescopeSubsystem,
+        wristSubsystem));
   }
 
   /**
