@@ -22,6 +22,7 @@ import frc.robot.subsystems.IntakeSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.LiftCommand;
 import frc.robot.commands.LimeLightTestCommand;
+import frc.robot.commands.TOFSensorTestCommand;
 import frc.robot.commands.TriMotorTestCommand;
 import frc.robot.subsystems.LiftSubsystem;
 import frc.robot.subsystems.LiftSubsystem2;
@@ -112,8 +113,8 @@ public class RobotContainer {
     driveToCollisionTrigger.onFalse(new DriveToCollisionCommand(driveSubsystem, speed, timeoutInSeconds));
 
     JoystickButton triMotorTrigger = new JoystickButton(driverController, XboxController.Button.kX.value);
-    triMotorTrigger.onFalse(new TriMotorTestCommand(liftSubsystem, liftSubsystem2, 2, 90, 45));
-    
+    //triMotorTrigger.onFalse(new TriMotorTestCommand(liftSubsystem, liftSubsystem2, 2, 90, 45));
+    triMotorTrigger.onFalse(new TOFSensorTestCommand());
 
     
   }
