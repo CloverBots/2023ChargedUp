@@ -21,6 +21,7 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.ArmCommand;
+import frc.robot.commands.ArmToPositionCommand;
 import frc.robot.commands.AutoAlignCommand;
 //import frc.robot.commands.LimeLightTestCommand;
 //import frc.robot.commands.TriMotorTestCommand;
@@ -116,16 +117,19 @@ public class RobotContainer {
     JoystickButton driveToCollisionButton = new JoystickButton(operatorController, XboxController.Button.kB.value);
     driveToCollisionButton.onFalse(new DriveToCollisionCommand(driveSubsystem, speed, timeoutInSeconds));
 
-    JoystickTrigger armTrigger = new JoystickTrigger(operatorController, XboxController.Axis.kLeftTrigger.value);
-    armTrigger
-        .whileTrue(new ArmCommand(armSubsystem, operatorController::getLeftTriggerAxis, operatorController::getLeftY));
+    //JoystickTrigger armTrigger = new JoystickTrigger(operatorController, XboxController.Axis.kLeftTrigger.value);
+   // armTrigger
+       // .whileTrue(new ArmCommand(armSubsystem, operatorController::getLeftTriggerAxis, operatorController::getLeftY));
 
-    JoystickTrigger wristTrigger = new JoystickTrigger(operatorController, XboxController.Axis.kLeftTrigger.value);
-    wristTrigger.whileTrue(
-        new WristCommand(wristSubsystem, operatorController::getLeftTriggerAxis, operatorController::getRightY));
+   // JoystickTrigger wristTrigger = new JoystickTrigger(operatorController, XboxController.Axis.kLeftTrigger.value);
+   // wristTrigger.whileTrue(
+       // new WristCommand(wristSubsystem, operatorController::getLeftTriggerAxis, operatorController::getRightY));
 
     JoystickButton alignButton = new JoystickButton(operatorController, XboxController.Button.kA.value);
     alignButton.whileTrue(new AutoAlignCommand(driveSubsystem, visionTargetTracker, 2));
+
+    JoystickButton armToPostionButton = new JoystickButton(operatorController, XboxController.Button.kY.value);
+    armToPostionButton.onTrue(new ArmToPositionCommand(armSubsystem, 50));
 
     // JoystickButton triMotorButton = new JoystickButton(driverController,
     // XboxController.Button.kX.value);

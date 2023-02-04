@@ -28,7 +28,7 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public double getArmEncoderPosition() {
-    return -motor.getEncoder().getPosition();
+    return motor.getEncoder().getPosition();
   }
 
   public void setArmMaximumPosition(double min, double max) {

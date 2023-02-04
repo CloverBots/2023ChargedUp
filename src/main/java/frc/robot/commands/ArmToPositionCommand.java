@@ -32,9 +32,10 @@ public class ArmToPositionCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    direction = -1; // going up
+    armSubsystem.resetEncoder();
+    direction = 1; // going up
     if (armSubsystem.getArmEncoderPosition() > position) {
-      direction = 1; // going down
+      direction = -1; // going down
     }
     SmartDashboard.putNumber("Arm starting position: ", armSubsystem.getArmEncoderPosition());
   }
@@ -55,9 +56,9 @@ public class ArmToPositionCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (direction == 1 && armSubsystem.getArmEncoderPosition() <= position) {
+    if (direction == -1 && armSubsystem.getArmEncoderPosition() <= position) {
       return true;
-    } else if (direction == -1 && armSubsystem.getArmEncoderPosition() >= position) {
+    } else if (direction == 1 && armSubsystem.getArmEncoderPosition() >= position) {
       return true;
     } else {
       return false;
