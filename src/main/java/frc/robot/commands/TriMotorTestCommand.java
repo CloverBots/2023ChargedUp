@@ -6,11 +6,11 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.LiftSubsystem;
-import frc.robot.subsystems.LiftSubsystem2;
+//import frc.robot.subsystems.LiftSubsystem;
+import frc.robot.subsystems.WristSubsystem;
 
 public class TriMotorTestCommand extends CommandBase {
-    
+ /**   
     // private LiftSubsystem liftSubsystem;
     // private LiftSubsystem2 liftSubsystem2;
     
@@ -31,7 +31,7 @@ public class TriMotorTestCommand extends CommandBase {
     private static final double KI = 0;
     private static final double KD = 0;
     private static final Timer timer = new Timer();
-    public TriMotorTestCommand(LiftSubsystem liftSubsystem, LiftSubsystem2 liftSubsystem2, double seconds, double ... motorRotationValues) {
+    public TriMotorTestCommand(LiftSubsystem liftSubsystem, WristSubsystem liftSubsystem2, double seconds, double ... motorRotationValues) {
         motorsToRotate = new MotorRotationInfo[motorRotationValues.length];
         
         motorsToRotate[0] = new MotorRotationInfo(liftSubsystem.getMotor());
@@ -167,5 +167,5 @@ public class TriMotorTestCommand extends CommandBase {
             return String.format("Degrees: %f, Endpoint: %f, initialEncode: %f, RPM: %f", degrees, tickEndpoint, initialEncoderVal, reqRPM);
         }
     }
-    
+    */
 }
