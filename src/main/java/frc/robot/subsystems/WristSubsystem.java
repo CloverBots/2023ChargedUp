@@ -5,7 +5,6 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.IDs;
 
@@ -13,7 +12,6 @@ public class WristSubsystem extends SubsystemBase {
   private final int CURRENT_LIMIT = 30; 
 
   private final CANSparkMax motor = new CANSparkMax(IDs.WRIST_DEVICE, MotorType.kBrushless);
-
 
   /**
    * Constructs a new {@link WristSubsystem} instance.

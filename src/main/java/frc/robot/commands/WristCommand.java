@@ -23,7 +23,7 @@ public class WristCommand extends CommandBase {
     this.wristSubsystem = wristSubsystem;
     this.trigger = trigger;
     this.rightJoystickY = rightJoystickY;
-System.out.println("xxxxxxxxxxxxxxxxxxxxxx");
+
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(wristSubsystem);
   }
