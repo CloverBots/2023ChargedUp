@@ -17,6 +17,7 @@ import frc.robot.commands.AutoWaitScoreCommand;
 import frc.robot.commands.DriveFromControllerCommand;
 import frc.robot.commands.DriveToCollisionCommand;
 import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.IntakeToPositionCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -124,8 +125,8 @@ public class RobotContainer {
     JoystickButton alignButton = new JoystickButton(operatorController, XboxController.Button.kA.value);
     alignButton.whileTrue(new AutoAlignCommand(driveSubsystem, visionTargetTracker, 2));
 
-    JoystickButton armToPostionButton = new JoystickButton(operatorController, XboxController.Button.kY.value);
-    armToPostionButton.onTrue(new ArmToPositionCommand(armSubsystem, 50));
+    JoystickButton intakeToPositionHighButton = new JoystickButton(operatorController, XboxController.Button.kY.value);
+    intakeToPositionHighButton.onTrue(new IntakeToPositionCommand(armSubsystem, telescopeSubsystem, wristSubsystem, 30, .5, 60, .2, 60, .7));
 
     // JoystickButton triMotorButton = new JoystickButton(driverController,
     // XboxController.Button.kX.value);

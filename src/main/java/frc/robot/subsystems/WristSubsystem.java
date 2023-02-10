@@ -21,7 +21,7 @@ public class WristSubsystem extends SubsystemBase {
 
     motor.setIdleMode(IdleMode.kBrake);
 
-    motor.setInverted(true);
+    motor.setInverted(false);
   }
 
   public void setWristSpeed(double speed) {
@@ -29,7 +29,7 @@ public class WristSubsystem extends SubsystemBase {
   }
 
   public double getWristEncoderPosition() {
-    return -motor.getEncoder().getPosition();
+    return motor.getEncoder().getPosition();
   }
 
   public void setWristMaximumPosition(double min, double max) {

@@ -7,8 +7,8 @@ public class TelescopeCommand extends CommandBase {
 
   TelescopeSubsystem telescopeSubsystem;
 
-  public final double UPPER_ENDPOINT = 10;
-  public final double LOWER_ENDPOINT = 0;
+  public static final double UPPER_ENDPOINT = 87;
+  public static final double LOWER_ENDPOINT = 0;
 
   public TelescopeCommand(TelescopeSubsystem telescopeSubsystem) {
     this.telescopeSubsystem = telescopeSubsystem;

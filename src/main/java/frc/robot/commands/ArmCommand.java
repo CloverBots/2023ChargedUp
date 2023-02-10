@@ -15,7 +15,7 @@ public class ArmCommand extends CommandBase {
   private final DoubleSupplier trigger;
   private final DoubleSupplier leftJoystickY;
   public static final double UPPER_ENDPOINT = 87; // in rotations
-  private final double LOWER_ENDPOINT = 0.0;
+  public static final double LOWER_ENDPOINT = 0.0;
   private final double APPROACH_MAX_SPEED = 0.2;
 
   /** Creates a new ArmCommand. */
