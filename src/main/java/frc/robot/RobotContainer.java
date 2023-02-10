@@ -101,12 +101,8 @@ public class RobotContainer {
   private void configureTriggerBindings() {
 
     JoystickTrigger startIntakeTrigger = new JoystickTrigger(operatorController,
-        XboxController.Axis.kRightTrigger.value);
-    startIntakeTrigger.whileTrue(new IntakeCommand(intakeSubsystem, operatorController::getRightTriggerAxis));
-
-    JoystickTrigger reverseIntakeTrigger = new JoystickTrigger(operatorController, XboxController.Button.kY.value);
-    reverseIntakeTrigger.whileTrue(new IntakeCommand(intakeSubsystem, operatorController::getYButton));
-
+        XboxController.Axis.kLeftTrigger.value);
+    startIntakeTrigger.whileTrue(new IntakeCommand(intakeSubsystem, operatorController::getLeftTriggerAxis, operatorController::getRightTriggerAxis));
     // JoystickButton limeLightTestButton = new JoystickButton(operatorController,
     // XboxController.Button.kA.value);
     // limeLightTestButton.whileHeld(new LimeLightTestCommand(visionTargetTracker));
@@ -135,6 +131,10 @@ public class RobotContainer {
     // XboxController.Button.kX.value);
     // triMotorButton.onFalse(new TriMotorTestCommand(liftSubsystem, liftSubsystem2,
     // 2, 90, 45));
+
+    JoystickButton armToLowPositionButton = new JoystickButton(operatorController, XboxController.Button.kA.value);
+
+
 
   }
 
