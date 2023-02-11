@@ -52,8 +52,8 @@ public class IntakeToPositionCommand extends CommandBase {
       wristPosition = WristSubsystem.UPPER_ENDPOINT;
     }
 
-    if (wristPosition < WristCommand.LOWER_ENDPOINT) {
-      wristPosition = WristCommand.LOWER_ENDPOINT;
+    if (wristPosition < WristSubsystem.LOWER_ENDPOINT) {
+      wristPosition = WristSubsystem.LOWER_ENDPOINT;
     }
 
     this.armSubsystem = armSubsystem;

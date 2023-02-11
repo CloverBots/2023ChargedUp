@@ -13,6 +13,7 @@ public class TelescopeCommand extends CommandBase {
   private final DoubleSupplier rightJoystickY;
   public static final double LOWER_ENDPOINT = 0.0;
   private final double APPROACH_MAX_SPEED = 0.2;
+  private final int APPROACH_ENCODER_LIMIT = 30;
 
   public TelescopeCommand(TelescopeSubsystem telescopeSubsystem, DoubleSupplier rightJoystickY) {
     this.rightJoystickY = rightJoystickY;
@@ -38,13 +39,13 @@ public class TelescopeCommand extends CommandBase {
         telescopeSpeed = 0;
       }
 
-      if (telescopeSubsystem.getTelescopeEncoderPosition() - LOWER_ENDPOINT < 3
-          || TelescopeSubsystem.UPPER_ENDPOINT - telescopeSubsystem.getTelescopeEncoderPosition() < 3) {
+      if (telescopeSubsystem.getTelescopeEncoderPosition() - LOWER_ENDPOINT < APPROACH_ENCODER_LIMIT
+          || TelescopeSubsystem.UPPER_ENDPOINT - telescopeSubsystem.getTelescopeEncoderPosition() < APPROACH_ENCODER_LIMIT) {
         telescopeSpeed = Math.min(Math.max(telescopeSpeed, -APPROACH_MAX_SPEED), APPROACH_MAX_SPEED);
       }
       
         telescopeSubsystem.setTelescopeSpeed(telescopeSpeed);
-    }
+    } else telescopeSubsystem.setTelescopeSpeed(0);
   }
 
   // Called once the command ends or is interrupted.

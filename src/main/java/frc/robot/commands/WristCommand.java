@@ -13,8 +13,8 @@ import frc.robot.subsystems.WristSubsystem;
 public class WristCommand extends CommandBase {
   private final WristSubsystem wristSubsystem;
   private final DoubleSupplier rightJoystickY;
-  public static final double LOWER_ENDPOINT = 0.0;
   private final double APPROACH_MAX_SPEED = 0.2;
+  private final int APPROACH_ENCODER_LIMIT = 30;
 
   /** Creates a new LiftCommand. */
   public WristCommand(WristSubsystem wristSubsystem, DoubleSupplier rightJoystickY) {
@@ -38,21 +38,22 @@ public class WristCommand extends CommandBase {
     SmartDashboard.putNumber("Wrist", wristSubsystem.getWristEncoderPosition());
 
     double wristSpeed = rightJoystickY.getAsDouble() * .5;
+    SmartDashboard.putNumber("Wrist Speed", wristSpeed);
     if (Math.abs(wristSpeed) > 0.05) {
       
-      if ((wristSubsystem.getWristEncoderPosition() <= LOWER_ENDPOINT && wristSpeed > 0) ||
+      if ((wristSubsystem.getWristEncoderPosition() <= WristSubsystem.LOWER_ENDPOINT && wristSpeed > 0) ||
           (wristSubsystem.getWristEncoderPosition() >= WristSubsystem.UPPER_ENDPOINT && wristSpeed < 0)) {
         wristSpeed = 0;
       }
 
-      if (wristSubsystem.getWristEncoderPosition() - LOWER_ENDPOINT < 3
-          || WristSubsystem.UPPER_ENDPOINT - wristSubsystem.getWristEncoderPosition() < 3) {
+      if (wristSubsystem.getWristEncoderPosition() - WristSubsystem.LOWER_ENDPOINT < APPROACH_ENCODER_LIMIT
+          || WristSubsystem.UPPER_ENDPOINT - wristSubsystem.getWristEncoderPosition() < APPROACH_ENCODER_LIMIT) {
         wristSpeed = Math.min(Math.max(wristSpeed, -APPROACH_MAX_SPEED), APPROACH_MAX_SPEED);
       }
       
         wristSubsystem.setWristSpeed(wristSpeed);
-    }
-  }
+    } else wristSubsystem.setWristSpeed(0);
+  } 
 
   // Called once the command ends or is interrupted.
   @Override
