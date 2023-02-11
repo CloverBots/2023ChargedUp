@@ -19,6 +19,7 @@ public class TelescopeSubsystem extends SubsystemBase {
   public static final double ENCODER_TICKS_PER_ROTATION = 2048;
 
   private final TalonFX motor = new TalonFX(IDs.TELESCOPE_DEVICE);
+public static final double UPPER_ENDPOINT = 87; // in rotations
 
   /** Creates a new TelescopeSubsystem. */
   public TelescopeSubsystem() {
@@ -31,7 +32,7 @@ public class TelescopeSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  public double getEncoderPosition() {
+  public double getTelescopeEncoderPosition() {
     return motor.getSelectedSensorPosition() / ENCODER_TICKS_PER_ROTATION * ENCODER_POSITION_CONVERSION_FACTOR;
   }
 

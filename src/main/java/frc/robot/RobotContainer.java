@@ -18,14 +18,12 @@ import frc.robot.commands.DriveFromControllerCommand;
 import frc.robot.commands.DriveToCollisionCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.IntakeToPositionCommand;
+import frc.robot.commands.TelescopeCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.ArmCommand;
-import frc.robot.commands.ArmToPositionCommand;
 import frc.robot.commands.AutoAlignCommand;
-//import frc.robot.commands.LimeLightTestCommand;
-//import frc.robot.commands.TriMotorTestCommand;
 import frc.robot.commands.WristCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.WristSubsystem;
@@ -64,11 +62,11 @@ public class RobotContainer {
   private final WristSubsystem wristSubsystem = new WristSubsystem();
   private final TelescopeSubsystem telescopeSubsystem = new TelescopeSubsystem();
 
-  private final ArmCommand armCommand = new ArmCommand(armSubsystem, operatorController::getLeftTriggerAxis,
-      operatorController::getLeftY);
+  private final ArmCommand armCommand = new ArmCommand(armSubsystem, operatorController::getLeftY);
 
-  private final WristCommand wristCommand = new WristCommand(wristSubsystem, operatorController::getLeftTriggerAxis,
-      operatorController::getRightY);
+  private final WristCommand wristCommand = new WristCommand(wristSubsystem, operatorController::getRightY);
+
+  //private final TelescopeCommand telescopeCommand = new TelescopeCommand(telescopeSubsystem, operatorController::getRightY);    
 
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
 
@@ -84,6 +82,8 @@ public class RobotContainer {
     driveSubsystem.setDefaultCommand(driveFromController);
     armSubsystem.setDefaultCommand(armCommand);
     wristSubsystem.setDefaultCommand(wristCommand);
+    //telescopeSubsystem.setDefaultCommand(telescopeCommand);
+
     configureTriggerBindings();
     configureChooserModes();
 
@@ -114,28 +114,11 @@ public class RobotContainer {
     JoystickButton driveToCollisionButton = new JoystickButton(operatorController, XboxController.Button.kB.value);
     driveToCollisionButton.onFalse(new DriveToCollisionCommand(driveSubsystem, speed, timeoutInSeconds));
 
-    //JoystickTrigger armTrigger = new JoystickTrigger(operatorController, XboxController.Axis.kLeftTrigger.value);
-   // armTrigger
-       // .whileTrue(new ArmCommand(armSubsystem, operatorController::getLeftTriggerAxis, operatorController::getLeftY));
-
-   // JoystickTrigger wristTrigger = new JoystickTrigger(operatorController, XboxController.Axis.kLeftTrigger.value);
-   // wristTrigger.whileTrue(
-       // new WristCommand(wristSubsystem, operatorController::getLeftTriggerAxis, operatorController::getRightY));
-
     JoystickButton alignButton = new JoystickButton(operatorController, XboxController.Button.kA.value);
     alignButton.whileTrue(new AutoAlignCommand(driveSubsystem, visionTargetTracker, 2));
 
     JoystickButton intakeToPositionHighButton = new JoystickButton(operatorController, XboxController.Button.kY.value);
     intakeToPositionHighButton.onTrue(new IntakeToPositionCommand(armSubsystem, telescopeSubsystem, wristSubsystem, 30, .5, 60, .2, 60, .7));
-
-    // JoystickButton triMotorButton = new JoystickButton(driverController,
-    // XboxController.Button.kX.value);
-    // triMotorButton.onFalse(new TriMotorTestCommand(liftSubsystem, liftSubsystem2,
-    // 2, 90, 45));
-
-    JoystickButton armToLowPositionButton = new JoystickButton(operatorController, XboxController.Button.kA.value);
-
-
 
   }
 

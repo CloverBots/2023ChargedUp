@@ -12,16 +12,12 @@ import frc.robot.subsystems.ArmSubsystem;
 
 public class ArmCommand extends CommandBase {
   private final ArmSubsystem armSubsystem;
-  private final DoubleSupplier trigger;
   private final DoubleSupplier leftJoystickY;
-  public static final double UPPER_ENDPOINT = 87; // in rotations
-  public static final double LOWER_ENDPOINT = 0.0;
   private final double APPROACH_MAX_SPEED = 0.2;
 
   /** Creates a new ArmCommand. */
-  public ArmCommand(ArmSubsystem armSubsystem, DoubleSupplier trigger, DoubleSupplier leftJoystickY) {
+  public ArmCommand(ArmSubsystem armSubsystem, DoubleSupplier leftJoystickY) {
     this.armSubsystem = armSubsystem;
-    this.trigger = trigger;
     this.leftJoystickY = leftJoystickY;
 
     // Use addRequirements() here to declare subsystem dependencies.
@@ -40,16 +36,16 @@ public class ArmCommand extends CommandBase {
 
     SmartDashboard.putNumber("elevator height", armSubsystem.getArmEncoderPosition());
 
-    if (trigger.getAsDouble() > .5) {
-      double armSpeed = leftJoystickY.getAsDouble() * .5;
-
-      if ((armSubsystem.getArmEncoderPosition() <= LOWER_ENDPOINT && armSpeed > 0) ||
-          (armSubsystem.getArmEncoderPosition() >= UPPER_ENDPOINT && armSpeed < 0)) {
+    double armSpeed = leftJoystickY.getAsDouble() * .5;
+    if (Math.abs(armSpeed) > 0.05) {
+      
+      if ((armSubsystem.getArmEncoderPosition() <= ArmSubsystem.LOWER_ENDPOINT && armSpeed > 0) ||
+          (armSubsystem.getArmEncoderPosition() >= ArmSubsystem.UPPER_ENDPOINT && armSpeed < 0)) {
         armSpeed = 0;
       }
 
-      if (armSubsystem.getArmEncoderPosition() - LOWER_ENDPOINT < 3
-          || UPPER_ENDPOINT - armSubsystem.getArmEncoderPosition() < 3) {
+      if (armSubsystem.getArmEncoderPosition() - ArmSubsystem.LOWER_ENDPOINT < 3
+          || ArmSubsystem.UPPER_ENDPOINT - armSubsystem.getArmEncoderPosition() < 3) {
         armSpeed = Math.min(Math.max(armSpeed, -APPROACH_MAX_SPEED), APPROACH_MAX_SPEED);
       }
       

@@ -13,6 +13,8 @@ public class WristSubsystem extends SubsystemBase {
 
   private final CANSparkMax motor = new CANSparkMax(IDs.WRIST_DEVICE, MotorType.kBrushless);
 
+public static final double UPPER_ENDPOINT = 87; // in rotations
+
   /**
    * Constructs a new {@link WristSubsystem} instance.
    */

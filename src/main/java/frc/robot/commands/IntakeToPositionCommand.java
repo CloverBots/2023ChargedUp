@@ -32,24 +32,24 @@ public class IntakeToPositionCommand extends CommandBase {
     double telescopePosition, double telescopeSpeed, double wristPosition, double wristSpeed) {
     
     
-    if (armPosition > ArmCommand.UPPER_ENDPOINT) {
-      armPosition = ArmCommand.UPPER_ENDPOINT;
+    if (armPosition > ArmSubsystem.UPPER_ENDPOINT) {
+      armPosition = ArmSubsystem.UPPER_ENDPOINT;
     }
 
-    if (armPosition < ArmCommand.LOWER_ENDPOINT) {
-      armPosition = ArmCommand.LOWER_ENDPOINT;
+    if (armPosition < ArmSubsystem.LOWER_ENDPOINT) {
+      armPosition = ArmSubsystem.LOWER_ENDPOINT;
     }
 
-    if (telescopePosition > TelescopeCommand.UPPER_ENDPOINT) {
-      telescopePosition = TelescopeCommand.UPPER_ENDPOINT;
+    if (telescopePosition > TelescopeSubsystem.UPPER_ENDPOINT) {
+      telescopePosition = TelescopeSubsystem.UPPER_ENDPOINT;
     }
 
     if (telescopePosition < TelescopeCommand.LOWER_ENDPOINT) {
       telescopePosition = TelescopeCommand.LOWER_ENDPOINT;
     }
 
-    if (wristPosition > WristCommand.UPPER_ENDPOINT) {
-      wristPosition = WristCommand.UPPER_ENDPOINT;
+    if (wristPosition > WristSubsystem.UPPER_ENDPOINT) {
+      wristPosition = WristSubsystem.UPPER_ENDPOINT;
     }
 
     if (wristPosition < WristCommand.LOWER_ENDPOINT) {
@@ -83,7 +83,7 @@ wristSubsystem.resetEncoder();
       armDirection = -1; // going down
     }
 
-    if (telescopeSubsystem.getEncoderPosition() > telescopePosition) {
+    if (telescopeSubsystem.getTelescopeEncoderPosition() > telescopePosition) {
       telescopeDirection = -1; // going down
     }
 

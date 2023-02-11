@@ -19,8 +19,8 @@ public class ArmToPositionCommand extends CommandBase {
     this.armSubsystem = armSubsystem;
 
     //Guard against too large of a position value
-    if (position > ArmCommand.UPPER_ENDPOINT) {
-      position = (int) ArmCommand.UPPER_ENDPOINT;
+    if (position > ArmSubsystem.UPPER_ENDPOINT) {
+      position = (int) ArmSubsystem.UPPER_ENDPOINT;
     }
     
     this.position = position;

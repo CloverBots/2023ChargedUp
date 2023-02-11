@@ -13,6 +13,10 @@ public class ArmSubsystem extends SubsystemBase {
 
   private final CANSparkMax motor = new CANSparkMax(IDs.ARM_DEVICE, MotorType.kBrushless);
 
+  public static final double LOWER_ENDPOINT = 0.0;
+
+  public static final double UPPER_ENDPOINT = 87; // in rotations
+
   public ArmSubsystem() {
     motor.setSmartCurrentLimit(CURRENT_LIMIT);
 
