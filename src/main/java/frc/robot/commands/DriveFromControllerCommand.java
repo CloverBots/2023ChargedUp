@@ -2,6 +2,8 @@ package frc.robot.commands;
 
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 // import org.ejml.sparse.ComputePermutation;
 
 // import edu.wpi.first.wpilibj.XboxController;
@@ -65,7 +67,7 @@ public class DriveFromControllerCommand extends CommandBase {
       rotationRatio = DEFAULT_ROTATION_RATIO;
       rotationCurve = DEFAULT_ROTATION_CURVE;
     }
-
+    SmartDashboard.putNumber("drive encoder", driveSubsystem.getAverageEncoderPosition());
     driveSubsystem.arcadeDrive(
         -computeInputCurve(forwardRatio * forward.getAsDouble(), forwardCurve),
         computeInputCurve(rotationRatio * rotation.getAsDouble(), rotationCurve));

@@ -59,12 +59,12 @@ public class RobotContainer {
   private final DriveSubsystem driveSubsystem = new DriveSubsystem();
 
   private final ArmSubsystem armSubsystem = new ArmSubsystem();
-  private final WristSubsystem wristSubsystem = new WristSubsystem();
-  private final TelescopeSubsystem telescopeSubsystem = new TelescopeSubsystem();
+  //private final WristSubsystem wristSubsystem = new WristSubsystem();
+  //private final TelescopeSubsystem telescopeSubsystem = new TelescopeSubsystem();
 
   private final ArmCommand armCommand = new ArmCommand(armSubsystem, operatorController::getLeftY);
 
-  private final WristCommand wristCommand = new WristCommand(wristSubsystem, operatorController::getRightY);
+  //private final WristCommand wristCommand = new WristCommand(wristSubsystem, operatorController::getRightY);
 
   //private final TelescopeCommand telescopeCommand = new TelescopeCommand(telescopeSubsystem, operatorController::getRightY);    
 
@@ -81,7 +81,7 @@ public class RobotContainer {
   public RobotContainer() {
     driveSubsystem.setDefaultCommand(driveFromController);
     armSubsystem.setDefaultCommand(armCommand);
-    wristSubsystem.setDefaultCommand(wristCommand);
+    //wristSubsystem.setDefaultCommand(wristCommand);
     //telescopeSubsystem.setDefaultCommand(telescopeCommand);
 
     configureTriggerBindings();
@@ -117,8 +117,8 @@ public class RobotContainer {
     JoystickButton alignButton = new JoystickButton(operatorController, XboxController.Button.kA.value);
     alignButton.whileTrue(new AutoAlignCommand(driveSubsystem, visionTargetTracker, 2));
 
-    JoystickButton intakeToPositionHighButton = new JoystickButton(operatorController, XboxController.Button.kY.value);
-    intakeToPositionHighButton.onTrue(new IntakeToPositionCommand(armSubsystem, telescopeSubsystem, wristSubsystem, 30, .5, 60, .2, 60, .7));
+    //JoystickButton intakeToPositionHighButton = new JoystickButton(operatorController, XboxController.Button.kY.value);
+    //intakeToPositionHighButton.onTrue(new IntakeToPositionCommand(armSubsystem, telescopeSubsystem, wristSubsystem, 30, .5, 60, .2, 60, .7));
 
   }
 
@@ -126,7 +126,7 @@ public class RobotContainer {
 
     SmartDashboard.putData("Autonomous Mode", chooser);
     SmartDashboard.putNumber("Auto Wait Time", 0);
-
+/**
     chooser.setDefaultOption("AutoScoreChargeCommand", new AutoScoreChargeCommand(
         armSubsystem,
         driveSubsystem,
@@ -145,6 +145,7 @@ public class RobotContainer {
         intakeSubsystem,
         telescopeSubsystem,
         wristSubsystem));
+        */
   }
 
   /**
