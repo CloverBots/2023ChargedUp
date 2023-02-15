@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 
+import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.IDs;
@@ -18,10 +19,12 @@ public class TelescopeSubsystem extends SubsystemBase {
   public static final double ENCODER_TICKS_PER_ROTATION = 2048;
 
   private final TalonFX motor = new TalonFX(IDs.TELESCOPE_DEVICE);
+public static final double UPPER_ENDPOINT = 87; // in rotations
 
   /** Creates a new TelescopeSubsystem. */
   public TelescopeSubsystem() {
     motor.setInverted(true);
+    resetEncoders();
   }
 
   @Override
@@ -29,12 +32,15 @@ public class TelescopeSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  public double getEncoderPosition() {
+  public double getTelescopeEncoderPosition() {
     return motor.getSelectedSensorPosition() / ENCODER_TICKS_PER_ROTATION * ENCODER_POSITION_CONVERSION_FACTOR;
   }
 
   public void resetEncoders() {
     motor.setSelectedSensorPosition(0);
+  }
 
+  public void setTelescopeSpeed(double speed) {
+    motor.set(TalonFXControlMode.PercentOutput, speed);
   }
 }

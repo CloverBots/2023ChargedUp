@@ -48,7 +48,7 @@ public class DriveToDistanceCommand extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        double distanceTraveled = driveSubsystem.getAverageEncoderDistance();
+        double distanceTraveled = driveSubsystem.getAverageEncoderPosition();
         SmartDashboard.putNumber("Distance Traveled", distanceTraveled);
 
         double rotateSpeed = driveSubsystem.driveRotatePidController.calculate(driveSubsystem.navXGyro.getHeading());

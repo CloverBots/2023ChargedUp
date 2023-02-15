@@ -13,6 +13,10 @@ public class WristSubsystem extends SubsystemBase {
 
   private final CANSparkMax motor = new CANSparkMax(IDs.WRIST_DEVICE, MotorType.kBrushless);
 
+  public static final double LOWER_ENDPOINT = -300;
+
+public static final double UPPER_ENDPOINT = 300; // in rotations
+
   /**
    * Constructs a new {@link WristSubsystem} instance.
    */
@@ -21,7 +25,7 @@ public class WristSubsystem extends SubsystemBase {
 
     motor.setIdleMode(IdleMode.kBrake);
 
-    motor.setInverted(true);
+    motor.setInverted(false);
   }
 
   public void setWristSpeed(double speed) {
@@ -29,7 +33,7 @@ public class WristSubsystem extends SubsystemBase {
   }
 
   public double getWristEncoderPosition() {
-    return -motor.getEncoder().getPosition();
+    return -motor.getEncoder().getPosition(); // negative because goofy encoder
   }
 
   public void setWristMaximumPosition(double min, double max) {

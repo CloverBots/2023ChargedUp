@@ -12,16 +12,13 @@ import frc.robot.subsystems.WristSubsystem;
 
 public class WristCommand extends CommandBase {
   private final WristSubsystem wristSubsystem;
-  private final DoubleSupplier trigger;
   private final DoubleSupplier rightJoystickY;
-  public static final double UPPER_ENDPOINT = 87; // in rotations
-  private final double LOWER_ENDPOINT = 0.0;
   private final double APPROACH_MAX_SPEED = 0.2;
+  private final int APPROACH_ENCODER_LIMIT = 30;
 
   /** Creates a new LiftCommand. */
-  public WristCommand(WristSubsystem wristSubsystem, DoubleSupplier trigger, DoubleSupplier rightJoystickY) {
+  public WristCommand(WristSubsystem wristSubsystem, DoubleSupplier rightJoystickY) {
     this.wristSubsystem = wristSubsystem;
-    this.trigger = trigger;
     this.rightJoystickY = rightJoystickY;
 
     // Use addRequirements() here to declare subsystem dependencies.
@@ -40,22 +37,23 @@ public class WristCommand extends CommandBase {
 
     SmartDashboard.putNumber("Wrist", wristSubsystem.getWristEncoderPosition());
 
-    if (trigger.getAsDouble() > .5) {
-      double wristSpeed = rightJoystickY.getAsDouble() * .5;
-
-      if ((wristSubsystem.getWristEncoderPosition() <= LOWER_ENDPOINT && wristSpeed > 0) ||
-          (wristSubsystem.getWristEncoderPosition() >= UPPER_ENDPOINT && wristSpeed < 0)) {
+    double wristSpeed = rightJoystickY.getAsDouble() * .5;
+    SmartDashboard.putNumber("Wrist Speed", wristSpeed);
+    if (Math.abs(wristSpeed) > 0.05) {
+      
+      if ((wristSubsystem.getWristEncoderPosition() <= WristSubsystem.LOWER_ENDPOINT && wristSpeed > 0) ||
+          (wristSubsystem.getWristEncoderPosition() >= WristSubsystem.UPPER_ENDPOINT && wristSpeed < 0)) {
         wristSpeed = 0;
       }
 
-      if (wristSubsystem.getWristEncoderPosition() - LOWER_ENDPOINT < 3
-          || UPPER_ENDPOINT - wristSubsystem.getWristEncoderPosition() < 3) {
+      if (wristSubsystem.getWristEncoderPosition() - WristSubsystem.LOWER_ENDPOINT < APPROACH_ENCODER_LIMIT
+          || WristSubsystem.UPPER_ENDPOINT - wristSubsystem.getWristEncoderPosition() < APPROACH_ENCODER_LIMIT) {
         wristSpeed = Math.min(Math.max(wristSpeed, -APPROACH_MAX_SPEED), APPROACH_MAX_SPEED);
       }
       
         wristSubsystem.setWristSpeed(wristSpeed);
-    }
-  }
+    } else wristSubsystem.setWristSpeed(0);
+  } 
 
   // Called once the command ends or is interrupted.
   @Override

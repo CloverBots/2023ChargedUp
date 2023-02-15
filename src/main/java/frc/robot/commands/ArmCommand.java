@@ -12,16 +12,12 @@ import frc.robot.subsystems.ArmSubsystem;
 
 public class ArmCommand extends CommandBase {
   private final ArmSubsystem armSubsystem;
-  private final DoubleSupplier trigger;
   private final DoubleSupplier leftJoystickY;
-  public static final double UPPER_ENDPOINT = 87; // in rotations
-  private final double LOWER_ENDPOINT = 0.0;
   private final double APPROACH_MAX_SPEED = 0.2;
-
+  private final int APPROACH_ENCODER_LIMIT = 30;
   /** Creates a new ArmCommand. */
-  public ArmCommand(ArmSubsystem armSubsystem, DoubleSupplier trigger, DoubleSupplier leftJoystickY) {
+  public ArmCommand(ArmSubsystem armSubsystem, DoubleSupplier leftJoystickY) {
     this.armSubsystem = armSubsystem;
-    this.trigger = trigger;
     this.leftJoystickY = leftJoystickY;
 
     // Use addRequirements() here to declare subsystem dependencies.
@@ -38,23 +34,25 @@ public class ArmCommand extends CommandBase {
   @Override
   public void execute() {
 
-    SmartDashboard.putNumber("elevator height", armSubsystem.getArmEncoderPosition());
+    SmartDashboard.putNumber("arm encoder", armSubsystem.getArmEncoderPosition());
 
-    if (trigger.getAsDouble() > .5) {
-      double armSpeed = leftJoystickY.getAsDouble() * .5;
-
-      if ((armSubsystem.getArmEncoderPosition() <= LOWER_ENDPOINT && armSpeed > 0) ||
-          (armSubsystem.getArmEncoderPosition() >= UPPER_ENDPOINT && armSpeed < 0)) {
+    double armSpeed = leftJoystickY.getAsDouble() * .5;
+    if (Math.abs(armSpeed) > 0.05) {
+      
+      if ((armSubsystem.getArmEncoderPosition() <= ArmSubsystem.LOWER_ENDPOINT && armSpeed > 0) ||
+          (armSubsystem.getArmEncoderPosition() >= ArmSubsystem.UPPER_ENDPOINT && armSpeed < 0)) {
         armSpeed = 0;
       }
 
-      if (armSubsystem.getArmEncoderPosition() - LOWER_ENDPOINT < 3
-          || UPPER_ENDPOINT - armSubsystem.getArmEncoderPosition() < 3) {
+      
+
+      if (armSubsystem.getArmEncoderPosition() - ArmSubsystem.LOWER_ENDPOINT < APPROACH_ENCODER_LIMIT
+          || ArmSubsystem.UPPER_ENDPOINT - armSubsystem.getArmEncoderPosition() < APPROACH_ENCODER_LIMIT) {
         armSpeed = Math.min(Math.max(armSpeed, -APPROACH_MAX_SPEED), APPROACH_MAX_SPEED);
       }
       
         armSubsystem.setArmSpeed(armSpeed);
-    }
+    } else armSubsystem.setArmSpeed(0);
   }
 
   // Called once the command ends or is interrupted.

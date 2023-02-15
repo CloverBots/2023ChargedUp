@@ -13,12 +13,16 @@ public class ArmSubsystem extends SubsystemBase {
 
   private final CANSparkMax motor = new CANSparkMax(IDs.ARM_DEVICE, MotorType.kBrushless);
 
+  public static final double LOWER_ENDPOINT = -500.0;
+
+  public static final double UPPER_ENDPOINT = 500; // in rotations
+
   public ArmSubsystem() {
     motor.setSmartCurrentLimit(CURRENT_LIMIT);
 
     motor.setIdleMode(IdleMode.kBrake);
 
-    motor.setInverted(true);
+    motor.setInverted(false);
 
     motor.getEncoder().setPosition(0);
   }
@@ -28,7 +32,7 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public double getArmEncoderPosition() {
-    return motor.getEncoder().getPosition();
+    return -motor.getEncoder().getPosition(); // negative because encoder is weird
   }
 
   public void setArmMaximumPosition(double min, double max) {
