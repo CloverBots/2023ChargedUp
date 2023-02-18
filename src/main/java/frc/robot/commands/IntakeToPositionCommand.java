@@ -96,7 +96,7 @@ wristSubsystem.resetEncoder();
   @Override
   public void execute() {
     armSubsystem.setArmSpeed(armSpeed * armDirection);
-    //telescopeSubsystem.setTelescopeSpeed(telescopeSpeed * telescopeDirection);
+    telescopeSubsystem.setTelescopeSpeed(telescopeSpeed * telescopeDirection);
     wristSubsystem.setWristSpeed(wristSpeed * wristDirection);
   }
 
@@ -104,7 +104,7 @@ wristSubsystem.resetEncoder();
   @Override
   public void end(boolean interrupted) {
     armSubsystem.setArmSpeed(0);
-    //telescopeSubsystem.setTelescopeSpeed(0);
+    telescopeSubsystem.setTelescopeSpeed(0);
     wristSubsystem.setWristSpeed(0);
   }
 
@@ -124,15 +124,15 @@ wristSubsystem.resetEncoder();
       armDone = true;
       armSubsystem.setArmSpeed(0);
     }
-/**
-    if (telescopeDirection == -1 && telescopeSubsystem.getEncoderPosition() <= telescopePosition) {
+
+    if (telescopeDirection == -1 && telescopeSubsystem.getTelescopeEncoderPosition() <= telescopePosition) {
       telescopeDone = true;
       telescopeSubsystem.setTelescopeSpeed(0);
-    } else if (telescopeDirection == 1 && telescopeSubsystem.getEncoderPosition() >= telescopePosition) {
+    } else if (telescopeDirection == 1 && telescopeSubsystem.getTelescopeEncoderPosition() >= telescopePosition) {
       telescopeDone = true;
       telescopeSubsystem.setTelescopeSpeed(0);
     }
-*/
+
     if (wristDirection == -1 && wristSubsystem.getWristEncoderPosition() <= wristPosition) {
       wristDone = true;
       wristSubsystem.setWristSpeed(0);

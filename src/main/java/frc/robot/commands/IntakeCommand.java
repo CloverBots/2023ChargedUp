@@ -1,6 +1,5 @@
 package frc.robot.commands;
 
-import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -23,12 +22,12 @@ public class IntakeCommand extends CommandBase {
     public void execute() {
         double speed = intakeSpeed.getAsDouble() >= 0.1 ? intakeSpeed.getAsDouble() : // fall back to reverse if not outside deadzone
         (negativeIntakeSpeed.getAsDouble() >= 0.1 ? -negativeIntakeSpeed.getAsDouble() : 0); // negative reverse trigger speed if outside deadzone
-        intakeSubsystem.startIntake(speed);
+        intakeSubsystem.setIntakeSpeed(speed);
     }
 
     @Override
     public void end(boolean interrupted) {
-        intakeSubsystem.stop();
+        intakeSubsystem.setIntakeSpeed(0);
     }
 
     @Override

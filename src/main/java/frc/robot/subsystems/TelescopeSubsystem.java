@@ -4,43 +4,49 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMax.SoftLimitDirection;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.IDs;
 
-
 public class TelescopeSubsystem extends SubsystemBase {
+  private final int CURRENT_LIMIT = 10;
 
-  public static final double WHEEL_DIAMETER_METERS = 0.1524;
-  public static final double ENCODER_POSITION_CONVERSION_FACTOR = 0.1 * WHEEL_DIAMETER_METERS * Math.PI;
-  public static final double ENCODER_VELOCITY_CONVERSION_FACTOR = ENCODER_POSITION_CONVERSION_FACTOR * 60.0;
-  public static final double ENCODER_TICKS_PER_ROTATION = 2048;
+  private final CANSparkMax motor = new CANSparkMax(IDs.TELESCOPE_DEVICE, MotorType.kBrushless);
 
-  private final TalonFX motor = new TalonFX(IDs.TELESCOPE_DEVICE);
-public static final double UPPER_ENDPOINT = 87; // in rotations
+  public static final double LOWER_ENDPOINT = -300;
 
-  /** Creates a new TelescopeSubsystem. */
+  public static final double UPPER_ENDPOINT = 300; // in rotations
+
+  /**
+   * Constructs a new {@link TelescopeSubsystem} instance.
+   */
   public TelescopeSubsystem() {
-    motor.setInverted(true);
-    resetEncoders();
-  }
+    motor.setSmartCurrentLimit(CURRENT_LIMIT);
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-  }
+    motor.setIdleMode(IdleMode.kBrake);
 
-  public double getTelescopeEncoderPosition() {
-    return motor.getSelectedSensorPosition() / ENCODER_TICKS_PER_ROTATION * ENCODER_POSITION_CONVERSION_FACTOR;
-  }
-
-  public void resetEncoders() {
-    motor.setSelectedSensorPosition(0);
+    motor.setInverted(false);
   }
 
   public void setTelescopeSpeed(double speed) {
-    motor.set(TalonFXControlMode.PercentOutput, speed);
+    motor.set(speed);
   }
+
+  public double getTelescopeEncoderPosition() {
+    return -motor.getEncoder().getPosition(); // negative because goofy encoder
+  }
+
+  public void setTelescopeMaximumPosition(double min, double max) {
+    motor.setSoftLimit(SoftLimitDirection.kForward, (float) max);
+    motor.setSoftLimit(SoftLimitDirection.kForward, (float) min);
+  }
+
+  public void resetEncoder() {
+    motor.getEncoder().setPosition(0);
+  }
+
 }

@@ -63,9 +63,7 @@ public class RobotContainer {
   //private final TelescopeSubsystem telescopeSubsystem = new TelescopeSubsystem();
 
   private final ArmCommand armCommand = new ArmCommand(armSubsystem, operatorController::getLeftY);
-
   //private final WristCommand wristCommand = new WristCommand(wristSubsystem, operatorController::getRightY);
-
   //private final TelescopeCommand telescopeCommand = new TelescopeCommand(telescopeSubsystem, operatorController::getRightY);    
 
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();

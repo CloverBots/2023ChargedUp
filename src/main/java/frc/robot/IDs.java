@@ -23,7 +23,7 @@ public final class IDs {
   public static final int DRIVE_RIGHT_FOLLOW_DEVICE = 13;
 
   // Intake
-  public static final int INTAKE_LEAD_DEVICE = 5;
+  public static final int INTAKE_DEVICE = 5;
 
   // Telescope
   public static final int TELESCOPE_DEVICE = 6;
