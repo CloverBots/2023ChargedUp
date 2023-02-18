@@ -50,6 +50,7 @@ public class DriveToDistanceCommand extends CommandBase {
     public void execute() {
         double distanceTraveled = driveSubsystem.getAverageEncoderPosition();
         SmartDashboard.putNumber("Distance Traveled", distanceTraveled);
+        SmartDashboard.putNumber("Distance Encoder", driveSubsystem.getRightEncoderPosition());
 
         double rotateSpeed = driveSubsystem.driveRotatePidController.calculate(driveSubsystem.navXGyro.getHeading());
 
@@ -73,5 +74,6 @@ public class DriveToDistanceCommand extends CommandBase {
         // end the command when the difference between the desired distance and the
         // actual distance is within a certain threshold calculated by the PID controller
         return driveSubsystem.driveDistancePidController.atSetpoint();
+        //return driveSubsystem.getAverageEncoderPosition() > distance;
     }
 }

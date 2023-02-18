@@ -58,17 +58,17 @@ public class RobotContainer {
 
   private final DriveSubsystem driveSubsystem = new DriveSubsystem();
 
-  private final ArmSubsystem armSubsystem = new ArmSubsystem();
+  //private final ArmSubsystem armSubsystem = new ArmSubsystem();
   //private final WristSubsystem wristSubsystem = new WristSubsystem();
   //private final TelescopeSubsystem telescopeSubsystem = new TelescopeSubsystem();
 
-  private final ArmCommand armCommand = new ArmCommand(armSubsystem, operatorController::getLeftY);
+  //private final ArmCommand armCommand = new ArmCommand(armSubsystem, operatorController::getLeftY);
 
   //private final WristCommand wristCommand = new WristCommand(wristSubsystem, operatorController::getRightY);
 
   //private final TelescopeCommand telescopeCommand = new TelescopeCommand(telescopeSubsystem, operatorController::getRightY);    
 
-  private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
+  //private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
 
   private final DriveFromControllerCommand driveFromController = new DriveFromControllerCommand(
       driveSubsystem,
@@ -80,7 +80,7 @@ public class RobotContainer {
 
   public RobotContainer() {
     driveSubsystem.setDefaultCommand(driveFromController);
-    armSubsystem.setDefaultCommand(armCommand);
+    //armSubsystem.setDefaultCommand(armCommand);
     //wristSubsystem.setDefaultCommand(wristCommand);
     //telescopeSubsystem.setDefaultCommand(telescopeCommand);
 
@@ -101,9 +101,9 @@ public class RobotContainer {
    */
   private void configureTriggerBindings() {
 
-    JoystickTrigger startIntakeTrigger = new JoystickTrigger(operatorController,
-        XboxController.Axis.kLeftTrigger.value);
-    startIntakeTrigger.whileTrue(new IntakeCommand(intakeSubsystem, operatorController::getLeftTriggerAxis, operatorController::getRightTriggerAxis));
+    //JoystickTrigger startIntakeTrigger = new JoystickTrigger(operatorController,
+    //    XboxController.Axis.kLeftTrigger.value);
+    //startIntakeTrigger.whileTrue(new IntakeCommand(intakeSubsystem, operatorController::getLeftTriggerAxis, operatorController::getRightTriggerAxis));
     // JoystickButton limeLightTestButton = new JoystickButton(operatorController,
     // XboxController.Button.kA.value);
     // limeLightTestButton.whileHeld(new LimeLightTestCommand(visionTargetTracker));
@@ -130,9 +130,8 @@ public class RobotContainer {
     chooser.setDefaultOption("AutoScoreChargeCommand", new AutoScoreChargeCommand(
         armSubsystem,
         driveSubsystem,
-        intakeSubsystem,
-        telescopeSubsystem,
-        wristSubsystem));
+        intakeSubsystem));
+    
     chooser.addOption("AutoScoreExitCommand", new AutoScoreExitCommand(
         armSubsystem,
         driveSubsystem,

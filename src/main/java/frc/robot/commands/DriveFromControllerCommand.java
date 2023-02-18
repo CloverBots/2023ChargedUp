@@ -16,7 +16,7 @@ public class DriveFromControllerCommand extends CommandBase {
   private static final double SLOW_ROTATION_RATIO = .3;
   private static final double SLOW_ROTATION_CURVE = 2;
 
-  private static final double DEFAULT_FOWARD_RATIO = .7;//0.7  smaller = less power
+  private static final double DEFAULT_FOWARD_RATIO = .9;//0.7  smaller = less power
   private static final double DEFAULT_FORWARD_CURVE = 3; //1.5 larger = more controll at small joystick values
   private static final double DEFAULT_ROTATION_RATIO = 0.6; //0.6
   private static final double DEFAULT_ROTATION_CURVE = 3; //2

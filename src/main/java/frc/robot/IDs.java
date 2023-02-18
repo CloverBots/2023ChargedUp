@@ -8,16 +8,10 @@ public final class IDs {
   public static final int CONTROLLER_OPERATOR_PORT = 1;
 
   // Drive
-  /**
   public static final int DRIVE_LEFT_LEAD_DEVICE = 1;
   public static final int DRIVE_LEFT_FOLLOW_DEVICE = 2;
   public static final int DRIVE_RIGHT_LEAD_DEVICE = 3;
   public static final int DRIVE_RIGHT_FOLLOW_DEVICE = 4;
-  */
-  public static final int DRIVE_LEFT_LEAD_DEVICE = 12;
-    public static final int DRIVE_LEFT_FOLLOW_DEVICE = 10;
-    public static final int DRIVE_RIGHT_LEAD_DEVICE = 14;
-    public static final int DRIVE_RIGHT_FOLLOW_DEVICE = 13;
 
   // Intake
   public static final int INTAKE_LEAD_DEVICE = 5;
