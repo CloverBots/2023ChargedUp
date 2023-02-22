@@ -17,9 +17,9 @@ public class TelescopeSubsystem extends SubsystemBase {
 
   private final CANSparkMax motor = new CANSparkMax(IDs.TELESCOPE_DEVICE, MotorType.kBrushless);
 
-  public static final double LOWER_ENDPOINT = -300;
+  public static final double LOWER_ENDPOINT = 0; //0
 
-  public static final double UPPER_ENDPOINT = 300; // in rotations
+  public static final double UPPER_ENDPOINT = 395; //
 
   /**
    * Constructs a new {@link TelescopeSubsystem} instance.
@@ -29,20 +29,28 @@ public class TelescopeSubsystem extends SubsystemBase {
 
     motor.setIdleMode(IdleMode.kBrake);
 
-    motor.setInverted(false);
+    motor.setInverted(true);
+
+    //setTelescopeMaximumPosition(LOWER_ENDPOINT, UPPER_ENDPOINT);
   }
 
   public void setTelescopeSpeed(double speed) {
+
+    if ((getTelescopeEncoderPosition() <= LOWER_ENDPOINT && speed > 0) ||
+          (getTelescopeEncoderPosition() >= UPPER_ENDPOINT && speed < 0)) {
+        speed = 0;
+      }
+
     motor.set(speed);
   }
 
   public double getTelescopeEncoderPosition() {
-    return -motor.getEncoder().getPosition(); // negative because goofy encoder
+    return -motor.getEncoder().getPosition(); // negative because motor flipped
   }
 
   public void setTelescopeMaximumPosition(double min, double max) {
     motor.setSoftLimit(SoftLimitDirection.kForward, (float) max);
-    motor.setSoftLimit(SoftLimitDirection.kForward, (float) min);
+    motor.setSoftLimit(SoftLimitDirection.kReverse, (float) min);
   }
 
   public void resetEncoder() {

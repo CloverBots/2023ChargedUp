@@ -44,8 +44,8 @@ public class IntakeToPositionCommand extends CommandBase {
       telescopePosition = TelescopeSubsystem.UPPER_ENDPOINT;
     }
 
-    if (telescopePosition < TelescopeCommand.LOWER_ENDPOINT) {
-      telescopePosition = TelescopeCommand.LOWER_ENDPOINT;
+    if (telescopePosition < TelescopeSubsystem.LOWER_ENDPOINT) {
+      telescopePosition = TelescopeSubsystem.LOWER_ENDPOINT;
     }
 
     if (wristPosition > WristSubsystem.UPPER_ENDPOINT) {
@@ -75,9 +75,6 @@ public class IntakeToPositionCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-armSubsystem.resetEncoder();
-wristSubsystem.resetEncoder();
-
 
     if (armSubsystem.getArmEncoderPosition() > armPosition) {
       armDirection = -1; // going down

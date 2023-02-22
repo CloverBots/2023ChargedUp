@@ -23,16 +23,14 @@ public final class IDs {
   public static final int DRIVE_RIGHT_FOLLOW_DEVICE = 13;
 
   // Intake
-  public static final int INTAKE_DEVICE = 5;
+  public static final int INTAKE_DEVICE = 9;
 
   // Telescope
-  public static final int TELESCOPE_DEVICE = 6;
+  public static final int TELESCOPE_DEVICE = 11;
 
   // Arm, Wrist
-  public static final int LIFT_UPPER_SWITCH = 9;
-  public static final int LIFT_LOWER_SWITCH = 8;
-  public static final int ARM_DEVICE = 8;
-  public static final int WRIST_DEVICE = 9;
+  public static final int ARM_DEVICE = 16;
+  public static final int WRIST_DEVICE = 8;
 
   // NavX Gyro
   public static final Port AHRS_PORT_ID = Port.kMXP;

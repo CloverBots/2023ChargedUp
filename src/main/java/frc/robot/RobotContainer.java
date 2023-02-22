@@ -59,28 +59,30 @@ public class RobotContainer {
   private final DriveSubsystem driveSubsystem = new DriveSubsystem();
 
   private final ArmSubsystem armSubsystem = new ArmSubsystem();
-  //private final WristSubsystem wristSubsystem = new WristSubsystem();
-  //private final TelescopeSubsystem telescopeSubsystem = new TelescopeSubsystem();
+  private final WristSubsystem wristSubsystem = new WristSubsystem();
+  private final TelescopeSubsystem telescopeSubsystem = new TelescopeSubsystem();
 
-  private final ArmCommand armCommand = new ArmCommand(armSubsystem, operatorController::getLeftY);
-  //private final WristCommand wristCommand = new WristCommand(wristSubsystem, operatorController::getRightY);
-  //private final TelescopeCommand telescopeCommand = new TelescopeCommand(telescopeSubsystem, operatorController::getRightY);    
+  private final ArmCommand armCommand = new ArmCommand(armSubsystem, driverController::getLeftY);
+  private final WristCommand wristCommand = new WristCommand(wristSubsystem, driverController::getRightY);
+  private final TelescopeCommand telescopeCommand = new TelescopeCommand(telescopeSubsystem, operatorController::getLeftY);    
 
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
-
+  private final IntakeCommand intakeCommand = new IntakeCommand(intakeSubsystem, operatorController::getRightY);
+/**
   private final DriveFromControllerCommand driveFromController = new DriveFromControllerCommand(
       driveSubsystem,
       driverController::getLeftY,
       driverController::getRightX,
       driverController::getLeftTriggerAxis);
-
+*/
   private final SendableChooser<Command> chooser = new SendableChooser<>();
 
   public RobotContainer() {
-    driveSubsystem.setDefaultCommand(driveFromController);
+ //   driveSubsystem.setDefaultCommand(driveFromController);
     armSubsystem.setDefaultCommand(armCommand);
-    //wristSubsystem.setDefaultCommand(wristCommand);
-    //telescopeSubsystem.setDefaultCommand(telescopeCommand);
+    wristSubsystem.setDefaultCommand(wristCommand);
+    telescopeSubsystem.setDefaultCommand(telescopeCommand);
+    intakeSubsystem.setDefaultCommand(intakeCommand);
 
     configureTriggerBindings();
     configureChooserModes();
@@ -100,8 +102,9 @@ public class RobotContainer {
   private void configureTriggerBindings() {
 
     JoystickTrigger startIntakeTrigger = new JoystickTrigger(operatorController,
-        XboxController.Axis.kLeftTrigger.value);
-    startIntakeTrigger.whileTrue(new IntakeCommand(intakeSubsystem, operatorController::getLeftTriggerAxis, operatorController::getRightTriggerAxis));
+        XboxController.Axis.kRightTrigger.value);
+   // startIntakeTrigger.whileTrue(new IntakeCommand(intakeSubsystem, operatorController::getRightTriggerAxis, operatorController::getRightTriggerAxis));
+
     // JoystickButton limeLightTestButton = new JoystickButton(operatorController,
     // XboxController.Button.kA.value);
     // limeLightTestButton.whileHeld(new LimeLightTestCommand(visionTargetTracker));
@@ -109,11 +112,11 @@ public class RobotContainer {
     JoystickButton balance = new JoystickButton(driverController, XboxController.Button.kB.value);
     balance.whileTrue(new AutoBalanceCommand(driveSubsystem));
 
-    JoystickButton driveToCollisionButton = new JoystickButton(operatorController, XboxController.Button.kB.value);
-    driveToCollisionButton.onFalse(new DriveToCollisionCommand(driveSubsystem, speed, timeoutInSeconds));
+   // JoystickButton driveToCollisionButton = new JoystickButton(operatorController, XboxController.Button.kB.value);
+   // driveToCollisionButton.onFalse(new DriveToCollisionCommand(driveSubsystem, speed, timeoutInSeconds));
 
-    JoystickButton alignButton = new JoystickButton(operatorController, XboxController.Button.kA.value);
-    alignButton.whileTrue(new AutoAlignCommand(driveSubsystem, visionTargetTracker, 2));
+   // JoystickButton alignButton = new JoystickButton(operatorController, XboxController.Button.kA.value);
+   // alignButton.whileTrue(new AutoAlignCommand(driveSubsystem, visionTargetTracker, 2));
 
     //JoystickButton intakeToPositionHighButton = new JoystickButton(operatorController, XboxController.Button.kY.value);
     //intakeToPositionHighButton.onTrue(new IntakeToPositionCommand(armSubsystem, telescopeSubsystem, wristSubsystem, 30, .5, 60, .2, 60, .7));

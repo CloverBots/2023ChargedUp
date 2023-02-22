@@ -38,14 +38,7 @@ public class ArmCommand extends CommandBase {
 
     double armSpeed = leftJoystickY.getAsDouble() * .5;
     if (Math.abs(armSpeed) > 0.05) {
-      
-      if ((armSubsystem.getArmEncoderPosition() <= ArmSubsystem.LOWER_ENDPOINT && armSpeed > 0) ||
-          (armSubsystem.getArmEncoderPosition() >= ArmSubsystem.UPPER_ENDPOINT && armSpeed < 0)) {
-        armSpeed = 0;
-      }
-
-      
-
+    
       if (armSubsystem.getArmEncoderPosition() - ArmSubsystem.LOWER_ENDPOINT < APPROACH_ENCODER_LIMIT
           || ArmSubsystem.UPPER_ENDPOINT - armSubsystem.getArmEncoderPosition() < APPROACH_ENCODER_LIMIT) {
         armSpeed = Math.min(Math.max(armSpeed, -APPROACH_MAX_SPEED), APPROACH_MAX_SPEED);

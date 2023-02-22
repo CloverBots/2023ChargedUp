@@ -9,13 +9,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.IDs;
 
 public class IntakeSubsystem extends SubsystemBase {
-    private final int CURRENT_LIMIT = 10;
+    private final int CURRENT_LIMIT = 30;
 
     private final CANSparkMax motor = new CANSparkMax(IDs.INTAKE_DEVICE, MotorType.kBrushless);
-
-    public static final double LOWER_ENDPOINT = -300;
-
-    public static final double UPPER_ENDPOINT = 300; // in rotations
 
     /**
      * Constructs a new {@link IntakeSubsystem} instance.

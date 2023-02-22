@@ -40,11 +40,7 @@ public class WristCommand extends CommandBase {
     double wristSpeed = rightJoystickY.getAsDouble() * .5;
     SmartDashboard.putNumber("Wrist Speed", wristSpeed);
     if (Math.abs(wristSpeed) > 0.05) {
-      
-      if ((wristSubsystem.getWristEncoderPosition() <= WristSubsystem.LOWER_ENDPOINT && wristSpeed > 0) ||
-          (wristSubsystem.getWristEncoderPosition() >= WristSubsystem.UPPER_ENDPOINT && wristSpeed < 0)) {
-        wristSpeed = 0;
-      }
+
 
       if (wristSubsystem.getWristEncoderPosition() - WristSubsystem.LOWER_ENDPOINT < APPROACH_ENCODER_LIMIT
           || WristSubsystem.UPPER_ENDPOINT - wristSubsystem.getWristEncoderPosition() < APPROACH_ENCODER_LIMIT) {
