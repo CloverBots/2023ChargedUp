@@ -5,8 +5,10 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.VisionTargetTracker.LedMode;
@@ -18,6 +20,7 @@ import frc.robot.commands.DriveFromControllerCommand;
 import frc.robot.commands.DriveToCollisionCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.IntakeToPositionCommand;
+import frc.robot.commands.TelescopeBypassSafetyCommand;
 import frc.robot.commands.TelescopeCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -61,28 +64,57 @@ public class RobotContainer {
   private final ArmSubsystem armSubsystem = new ArmSubsystem();
   private final WristSubsystem wristSubsystem = new WristSubsystem();
   private final TelescopeSubsystem telescopeSubsystem = new TelescopeSubsystem();
-
-  private final ArmCommand armCommand = new ArmCommand(armSubsystem, driverController::getLeftY);
-  private final WristCommand wristCommand = new WristCommand(wristSubsystem, driverController::getRightY);
-  private final TelescopeCommand telescopeCommand = new TelescopeCommand(telescopeSubsystem, operatorController::getLeftY);    
+//operatorController::getLeftTriggerAxis
+  private final ArmCommand armCommand = new ArmCommand(armSubsystem, operatorController::getLeftY);
+  private final WristCommand wristCommand = new WristCommand(wristSubsystem, operatorController::getRightY);
+  private final TelescopeBypassSafetyCommand telescopeBypassSafetyCommand = new TelescopeBypassSafetyCommand(telescopeSubsystem);  
 
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
-  private final IntakeCommand intakeCommand = new IntakeCommand(intakeSubsystem, operatorController::getRightY);
-/**
+  private final IntakeCommand intakeCommand = new IntakeCommand(intakeSubsystem, operatorController::getRightTriggerAxis, operatorController::getLeftTriggerAxis);
+
+  private final IntakeToPositionCommand intakeToHighPositionCommand = new IntakeToPositionCommand(armSubsystem, telescopeSubsystem, wristSubsystem,
+  63, 0.5, //63
+  310, 1.0, //310
+  40, 0.3, //40
+  10,3); //10
+
+  private final IntakeToPositionCommand intakeToMiddlePositionCommand = new IntakeToPositionCommand(armSubsystem, telescopeSubsystem, wristSubsystem,
+  31, 0.5, //31
+  155, 0.6, //155
+  20, 0.3, //20
+  10,3); //10
+
+  private final IntakeToPositionCommand intakeToHumanPositionCommand = new IntakeToPositionCommand(armSubsystem, telescopeSubsystem, wristSubsystem,
+  31, 0.5, //31
+  155, 0.6, //155
+  20, 0.3, //20
+  10,3); //10
+
+  private final IntakeToPositionCommand intakeToHomePositionCommand = new IntakeToPositionCommand(armSubsystem, telescopeSubsystem, wristSubsystem, 
+  0, 0.3,
+  0, 1.0,
+  0, 0.3,
+  0,3);
+ 
+  private final IntakeToPositionCommand intakeToGroundPositionCommand = new IntakeToPositionCommand(armSubsystem, telescopeSubsystem, wristSubsystem, 
+  20, 0.3,
+  150, 0.3,
+  0, 0.3,
+  3,1);
+
   private final DriveFromControllerCommand driveFromController = new DriveFromControllerCommand(
       driveSubsystem,
       driverController::getLeftY,
       driverController::getRightX,
       driverController::getLeftTriggerAxis);
-*/
+
   private final SendableChooser<Command> chooser = new SendableChooser<>();
 
   public RobotContainer() {
- //   driveSubsystem.setDefaultCommand(driveFromController);
-    armSubsystem.setDefaultCommand(armCommand);
-    wristSubsystem.setDefaultCommand(wristCommand);
-    telescopeSubsystem.setDefaultCommand(telescopeCommand);
-    intakeSubsystem.setDefaultCommand(intakeCommand);
+  //  driveSubsystem.setDefaultCommand(driveFromController);
+   armSubsystem.setDefaultCommand(armCommand);
+   wristSubsystem.setDefaultCommand(wristCommand);
+   intakeSubsystem.setDefaultCommand(intakeCommand);
 
     configureTriggerBindings();
     configureChooserModes();
@@ -112,22 +144,44 @@ public class RobotContainer {
     JoystickButton balance = new JoystickButton(driverController, XboxController.Button.kB.value);
     balance.whileTrue(new AutoBalanceCommand(driveSubsystem));
 
+    JoystickButton telescopeInButton = new JoystickButton(operatorController, Button.kRightBumper.value);
+    telescopeInButton.whileTrue(new TelescopeCommand(telescopeSubsystem, true, false));
+
+    JoystickButton telescopeOutButton = new JoystickButton(operatorController, Button.kLeftBumper.value);
+    telescopeOutButton.whileTrue(new TelescopeCommand(telescopeSubsystem, false, true));
+
    // JoystickButton driveToCollisionButton = new JoystickButton(operatorController, XboxController.Button.kB.value);
    // driveToCollisionButton.onFalse(new DriveToCollisionCommand(driveSubsystem, speed, timeoutInSeconds));
 
    // JoystickButton alignButton = new JoystickButton(operatorController, XboxController.Button.kA.value);
    // alignButton.whileTrue(new AutoAlignCommand(driveSubsystem, visionTargetTracker, 2));
 
-    //JoystickButton intakeToPositionHighButton = new JoystickButton(operatorController, XboxController.Button.kY.value);
-    //intakeToPositionHighButton.onTrue(new IntakeToPositionCommand(armSubsystem, telescopeSubsystem, wristSubsystem, 30, .5, 60, .2, 60, .7));
+    JoystickButton intakeToPositionHighButton = new JoystickButton(operatorController, XboxController.Button.kY.value);
+    intakeToPositionHighButton.onTrue(intakeToHighPositionCommand);
 
+    JoystickButton intakeToPositionMiddleButton = new JoystickButton(operatorController, XboxController.Button.kB.value);
+    intakeToPositionMiddleButton.onTrue(intakeToMiddlePositionCommand);
+
+    JoystickButton intakeToPositionHumanButton = new JoystickButton(operatorController, XboxController.Button.kX.value);
+    intakeToPositionHumanButton.onTrue(intakeToHumanPositionCommand);
+
+    POVButton intakeToPositionHomeButton = new POVButton(operatorController, 180); // Down
+    intakeToPositionHomeButton.onTrue(intakeToHomePositionCommand);
+
+    JoystickButton intakeToPositionGroundButton = new JoystickButton(operatorController, XboxController.Button.kA.value);
+    intakeToPositionGroundButton.onTrue(intakeToGroundPositionCommand);
+
+    //Provide ability to bypass the encoder safety limits in order to retract the telescope after a power interruption
+    POVButton dPadDownButton = new POVButton(operatorController, 270);
+        dPadDownButton.onTrue(telescopeBypassSafetyCommand);
+        
   }
 
   private void configureChooserModes() {
 
     SmartDashboard.putData("Autonomous Mode", chooser);
     SmartDashboard.putNumber("Auto Wait Time", 0);
-/**
+
     chooser.setDefaultOption("AutoScoreChargeCommand", new AutoScoreChargeCommand(
         armSubsystem,
         driveSubsystem,
@@ -146,7 +200,7 @@ public class RobotContainer {
         intakeSubsystem,
         telescopeSubsystem,
         wristSubsystem));
-        */
+          
   }
 
   /**

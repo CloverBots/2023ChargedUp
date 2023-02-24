@@ -6,7 +6,6 @@ package frc.robot.commands;
 
 import java.util.function.DoubleSupplier;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmSubsystem;
 
@@ -34,9 +33,8 @@ public class ArmCommand extends CommandBase {
   @Override
   public void execute() {
 
-    SmartDashboard.putNumber("arm encoder", armSubsystem.getArmEncoderPosition());
-
-    double armSpeed = leftJoystickY.getAsDouble() * .5;
+    double armSpeed = -leftJoystickY.getAsDouble() * .5; //negative because joystick Y is negative for forward push of joystick
+    
     if (Math.abs(armSpeed) > 0.05) {
     
       if (armSubsystem.getArmEncoderPosition() - ArmSubsystem.LOWER_ENDPOINT < APPROACH_ENCODER_LIMIT

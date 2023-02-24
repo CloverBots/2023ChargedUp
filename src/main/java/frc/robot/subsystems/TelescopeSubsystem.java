@@ -9,6 +9,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.IDs;
 
@@ -17,9 +18,9 @@ public class TelescopeSubsystem extends SubsystemBase {
 
   private final CANSparkMax motor = new CANSparkMax(IDs.TELESCOPE_DEVICE, MotorType.kBrushless);
 
-  public static final double LOWER_ENDPOINT = 0; //0
+  public static final double LOWER_ENDPOINT = 0; // 0
 
-  public static final double UPPER_ENDPOINT = 395; //
+  public static final double UPPER_ENDPOINT = 395; // 395
 
   /**
    * Constructs a new {@link TelescopeSubsystem} instance.
@@ -29,23 +30,28 @@ public class TelescopeSubsystem extends SubsystemBase {
 
     motor.setIdleMode(IdleMode.kBrake);
 
-    motor.setInverted(true);
+    motor.setInverted(false);
 
-    //setTelescopeMaximumPosition(LOWER_ENDPOINT, UPPER_ENDPOINT);
+    // setTelescopeMaximumPosition(LOWER_ENDPOINT, UPPER_ENDPOINT);
   }
 
-  public void setTelescopeSpeed(double speed) {
+  public void setTelescopeSpeed(double speed, boolean byPassSafety) {
 
-    if ((getTelescopeEncoderPosition() <= LOWER_ENDPOINT && speed > 0) ||
-          (getTelescopeEncoderPosition() >= UPPER_ENDPOINT && speed < 0)) {
+    SmartDashboard.putNumber("Telescope Encoder", getTelescopeEncoderPosition());
+
+    // positive speed extends the telescope
+    if (!byPassSafety) {
+      if ((getTelescopeEncoderPosition() <= LOWER_ENDPOINT && speed < 0) ||
+          (getTelescopeEncoderPosition() >= UPPER_ENDPOINT && speed > 0)) {
         speed = 0;
       }
-
+    }
+    
     motor.set(speed);
   }
 
   public double getTelescopeEncoderPosition() {
-    return -motor.getEncoder().getPosition(); // negative because motor flipped
+    return motor.getEncoder().getPosition(); // negative because motor flipped
   }
 
   public void setTelescopeMaximumPosition(double min, double max) {

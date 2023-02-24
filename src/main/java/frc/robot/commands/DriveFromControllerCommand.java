@@ -69,7 +69,7 @@ public class DriveFromControllerCommand extends CommandBase {
     }
     SmartDashboard.putNumber("drive encoder", driveSubsystem.getAverageEncoderPosition());
     driveSubsystem.arcadeDrive(
-        -computeInputCurve(forwardRatio * forward.getAsDouble(), forwardCurve),
+        computeInputCurve(forwardRatio * forward.getAsDouble(), forwardCurve),
         computeInputCurve(rotationRatio * rotation.getAsDouble(), rotationCurve));
   }
 

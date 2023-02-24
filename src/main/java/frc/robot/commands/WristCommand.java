@@ -37,8 +37,8 @@ public class WristCommand extends CommandBase {
 
     SmartDashboard.putNumber("Wrist", wristSubsystem.getWristEncoderPosition());
 
-    double wristSpeed = rightJoystickY.getAsDouble() * .5;
-    SmartDashboard.putNumber("Wrist Speed", wristSpeed);
+    double wristSpeed = -rightJoystickY.getAsDouble() * .5; //negative because joystick Y gives negative value when pushing it forward
+    
     if (Math.abs(wristSpeed) > 0.05) {
 
 

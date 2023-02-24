@@ -31,7 +31,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     motor.setIdleMode(IdleMode.kBrake);
 
-    motor.setInverted(false);
+    motor.setInverted(true); //so forward on joystick moves arm up
     
     bottomDistanceSensor.setRangingMode(RangingMode.Short, 33);
     topDistanceSensor.setRangingMode(RangingMode.Short, 33);
@@ -66,8 +66,10 @@ public class ArmSubsystem extends SubsystemBase {
 
   public void setArmSpeed(double speed) {
 
-    if ((getArmEncoderPosition() <= LOWER_ENDPOINT && speed > 0) ||
-          (getArmEncoderPosition() >= UPPER_ENDPOINT && speed < 0)) {
+    SmartDashboard.putNumber("Arm Encoder", getArmEncoderPosition());
+
+    if ((getArmEncoderPosition() <= LOWER_ENDPOINT && speed < 0) ||
+          (getArmEncoderPosition() >= UPPER_ENDPOINT && speed > 0)) {
         speed = 0;
       }
 
@@ -84,7 +86,7 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public double getArmEncoderPosition() {
-    return -motor.getEncoder().getPosition(); 
+    return motor.getEncoder().getPosition(); 
   }
 
   public void setArmMaximumPosition(double min, double max) {

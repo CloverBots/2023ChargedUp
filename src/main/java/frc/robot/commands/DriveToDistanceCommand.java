@@ -38,9 +38,10 @@ public class DriveToDistanceCommand extends CommandBase {
     public void initialize() {
         driveSubsystem.resetEncoders();
         driveSubsystem.navXGyro.reset();
-        //drives in reverse, so reverse distance to move forward
-        driveSubsystem.driveDistancePidController.setSetpoint(-distance); 
+        
+        driveSubsystem.driveDistancePidController.setSetpoint(distance); 
         driveSubsystem.driveRotatePidController.setSetpoint(rotate+driveSubsystem.navXGyro.getHeading());
+       
         // setting tolerance
         driveSubsystem.driveDistancePidController.setTolerance(tolerance);
     }
