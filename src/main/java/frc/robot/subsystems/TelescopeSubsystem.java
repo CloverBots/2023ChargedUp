@@ -20,7 +20,7 @@ public class TelescopeSubsystem extends SubsystemBase {
 
   public static final double LOWER_ENDPOINT = 0; // 0
 
-  public static final double UPPER_ENDPOINT = 395; // 395
+  public static final double UPPER_ENDPOINT = 230; // 236
 
   /**
    * Constructs a new {@link TelescopeSubsystem} instance.

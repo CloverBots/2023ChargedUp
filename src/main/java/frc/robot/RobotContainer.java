@@ -73,34 +73,35 @@ public class RobotContainer {
   private final IntakeCommand intakeCommand = new IntakeCommand(intakeSubsystem, operatorController::getRightTriggerAxis, operatorController::getLeftTriggerAxis);
 
   private final IntakeToPositionCommand intakeToHighPositionCommand = new IntakeToPositionCommand(armSubsystem, telescopeSubsystem, wristSubsystem,
-  63, 0.5, //63
-  310, 1.0, //310
+  64, 0.5, //67
+  190, 1.0, //190
   40, 0.3, //40
   10,3); //10
 
   private final IntakeToPositionCommand intakeToMiddlePositionCommand = new IntakeToPositionCommand(armSubsystem, telescopeSubsystem, wristSubsystem,
-  31, 0.5, //31
-  155, 0.6, //155
-  20, 0.3, //20
-  10,3); //10
+  52, 0.5, //55
+  50, 0.6, //50
+  30, 0.4, //30
+  5,3); //5
+
 
   private final IntakeToPositionCommand intakeToHumanPositionCommand = new IntakeToPositionCommand(armSubsystem, telescopeSubsystem, wristSubsystem,
-  31, 0.5, //31
-  155, 0.6, //155
-  20, 0.3, //20
-  10,3); //10
+  65, 0.5, //65
+  0, 0.6, //0
+  0, 0.3, //0
+  0,3); //0
 
   private final IntakeToPositionCommand intakeToHomePositionCommand = new IntakeToPositionCommand(armSubsystem, telescopeSubsystem, wristSubsystem, 
-  0, 0.3,
-  0, 1.0,
-  0, 0.3,
-  0,3);
+  0, 0.3, //0
+  0, 0.7, //0
+  0, 0.3, //0
+  0,3); //0
  
   private final IntakeToPositionCommand intakeToGroundPositionCommand = new IntakeToPositionCommand(armSubsystem, telescopeSubsystem, wristSubsystem, 
-  20, 0.3,
-  150, 0.3,
-  0, 0.3,
-  3,1);
+  30, 0.3, //30
+  140, 1.0, //140
+  -30, 0.5, // -30
+  15,1); //15
 
   private final DriveFromControllerCommand driveFromController = new DriveFromControllerCommand(
       driveSubsystem,
@@ -111,7 +112,7 @@ public class RobotContainer {
   private final SendableChooser<Command> chooser = new SendableChooser<>();
 
   public RobotContainer() {
-  //  driveSubsystem.setDefaultCommand(driveFromController);
+  // driveSubsystem.setDefaultCommand(driveFromController);
    armSubsystem.setDefaultCommand(armCommand);
    wristSubsystem.setDefaultCommand(wristCommand);
    intakeSubsystem.setDefaultCommand(intakeCommand);
