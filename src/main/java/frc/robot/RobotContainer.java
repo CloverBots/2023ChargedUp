@@ -151,10 +151,10 @@ public class RobotContainer {
     JoystickButton telescopeOutButton = new JoystickButton(operatorController, Button.kLeftBumper.value);
     telescopeOutButton.whileTrue(new TelescopeCommand(telescopeSubsystem, false, true));
 
-   // JoystickButton driveToCollisionButton = new JoystickButton(operatorController, XboxController.Button.kB.value);
+   // JoystickButton driveToCollisionButton = new JoystickButton(driverController, XboxController.Button.kY.value);
    // driveToCollisionButton.onFalse(new DriveToCollisionCommand(driveSubsystem, speed, timeoutInSeconds));
 
-   // JoystickButton alignButton = new JoystickButton(operatorController, XboxController.Button.kA.value);
+   // JoystickButton alignButton = new JoystickButton(driverController, XboxController.Button.kA.value);
    // alignButton.whileTrue(new AutoAlignCommand(driveSubsystem, visionTargetTracker, 2));
 
     JoystickButton intakeToPositionHighButton = new JoystickButton(operatorController, XboxController.Button.kY.value);
@@ -173,7 +173,7 @@ public class RobotContainer {
     intakeToPositionGroundButton.onTrue(intakeToGroundPositionCommand);
 
     //Provide ability to bypass the encoder safety limits in order to retract the telescope after a power interruption
-    POVButton dPadDownButton = new POVButton(operatorController, 270);
+    POVButton dPadDownButton = new POVButton(driverController, 180); //down
         dPadDownButton.onTrue(telescopeBypassSafetyCommand);
         
   }

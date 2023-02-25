@@ -29,7 +29,7 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public double getIntakeEncoderPosition() {
-        return -motor.getEncoder().getPosition(); // negative because goofy encoder
+        return motor.getEncoder().getPosition(); 
     }
 
     public void setIntakeMaximumPosition(double min, double max) {
