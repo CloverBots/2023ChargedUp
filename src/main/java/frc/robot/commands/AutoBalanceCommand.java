@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.IDs;
 import frc.robot.NavXGyro;
@@ -44,16 +45,16 @@ public class AutoBalanceCommand extends CommandBase {
         drivePower = -Math.min(IDs.BEAM_BALANACED_DRIVE_KP * error, 1);
 
         // Our robot needed an extra push to drive up in reverse, probably due to weight
-        // imbalances
-        if (drivePower < 0) {
-            drivePower *= IDs.BACKWARDS_BALANCING_EXTRA_POWER_MULTIPLIER;
-        }
+        // imbalances (not anymore)
+        
+        drivePower *= IDs.BACKWARDS_BALANCING_EXTRA_POWER_MULTIPLIER;
+        
 
         // Limit the max power
         if (Math.abs(drivePower) > 0.4) {
             drivePower = Math.copySign(0.4, drivePower);
         }
-
+        SmartDashboard.putNumber("Auto Balance Drive Power", drivePower);
         driveSubsystem.autoDrive(drivePower, 0);
     }
 

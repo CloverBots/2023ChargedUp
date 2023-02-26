@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
@@ -68,7 +69,12 @@ public class DriveSubsystem extends SubsystemBase implements RobotLifecycleCallb
 
     public DriveSubsystem() {
       leftFollowMotor.follow(leftLeadMotor);
+      leftFollowMotor.setNeutralMode(NeutralMode.Brake);
       rightFollowMotor.follow(rightLeadMotor);
+      rightFollowMotor.setNeutralMode(NeutralMode.Brake);
+
+      leftLeadMotor.setNeutralMode(NeutralMode.Brake);
+      rightLeadMotor.setNeutralMode(NeutralMode.Brake);
 
       rightLeadMotor.setInverted(true);
       rightFollowMotor.setInverted(true);

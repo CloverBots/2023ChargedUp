@@ -18,7 +18,7 @@ public class TelescopeSubsystem extends SubsystemBase {
 
   private final CANSparkMax motor = new CANSparkMax(IDs.TELESCOPE_DEVICE, MotorType.kBrushless);
 
-  public static final double LOWER_ENDPOINT = 0; // 0
+  public static final double LOWER_ENDPOINT = 2; // 0, (slightly above 0 to prevent overshoot)
 
   public static final double UPPER_ENDPOINT = 230; // 236
 

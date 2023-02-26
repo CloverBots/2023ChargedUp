@@ -36,7 +36,7 @@ public final class IDs {
   public static final Port AHRS_PORT_ID = Port.kMXP;
 
   // Beam
-  public static final double BEAM_BALANACED_DRIVE_KP = 0.005; // .015, lower = slower, as weight goes up number needs to
+  public static final double BEAM_BALANACED_DRIVE_KP = 0.015; // .015, lower = slower, as weight goes up number needs to
                                                               // go up
   public static final double BEAM_BALANCED_GOAL_DEGREES = 0;
   public static final double BEAM_BALANCED_ANGLE_THRESHOLD_DEGREES = 1;

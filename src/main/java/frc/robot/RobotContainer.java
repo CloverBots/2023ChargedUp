@@ -79,21 +79,21 @@ public class RobotContainer {
   10,3); //10
 
   private final IntakeToPositionCommand intakeToMiddlePositionCommand = new IntakeToPositionCommand(armSubsystem, telescopeSubsystem, wristSubsystem,
-  52, 0.5, //55
-  50, 0.6, //50
-  30, 0.4, //30
-  5,3); //5
+  55, 0.5, //55
+  53, 0.5, //50
+  40, 1.0, //30
+  10,3); //5
 
 
   private final IntakeToPositionCommand intakeToHumanPositionCommand = new IntakeToPositionCommand(armSubsystem, telescopeSubsystem, wristSubsystem,
-  65, 0.5, //65
+  57, 0.5, //65
   0, 0.6, //0
-  0, 0.3, //0
-  0,3); //0
+  10, 0.3, //0
+  10,3); //0
 
   private final IntakeToPositionCommand intakeToHomePositionCommand = new IntakeToPositionCommand(armSubsystem, telescopeSubsystem, wristSubsystem, 
   0, 0.3, //0
-  0, 0.7, //0
+  0, 0.8, //0
   0, 0.3, //0
   0,3); //0
  
@@ -107,12 +107,13 @@ public class RobotContainer {
       driveSubsystem,
       driverController::getLeftY,
       driverController::getRightX,
-      driverController::getLeftTriggerAxis);
+      driverController::getLeftTriggerAxis,
+      driverController::getRightTriggerAxis);
 
   private final SendableChooser<Command> chooser = new SendableChooser<>();
 
   public RobotContainer() {
-  // driveSubsystem.setDefaultCommand(driveFromController);
+   driveSubsystem.setDefaultCommand(driveFromController);
    armSubsystem.setDefaultCommand(armCommand);
    wristSubsystem.setDefaultCommand(wristCommand);
    intakeSubsystem.setDefaultCommand(intakeCommand);
