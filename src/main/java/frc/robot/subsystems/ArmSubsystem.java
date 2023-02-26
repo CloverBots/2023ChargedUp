@@ -42,7 +42,7 @@ public class ArmSubsystem extends SubsystemBase {
     //motor.getEncoder().setPosition(0);
 
   }
-  
+  /** Not used
   private void calibrateArm() {
     double range = bottomDistanceSensor.getRange();
 
@@ -63,6 +63,7 @@ public class ArmSubsystem extends SubsystemBase {
     motor.getEncoder().setPosition(0);
       
   }
+  */
 
   public void setArmSpeed(double speed) {
 

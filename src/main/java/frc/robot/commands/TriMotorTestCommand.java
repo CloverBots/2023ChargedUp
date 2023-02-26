@@ -1,14 +1,16 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj2.command.CommandBase;
+
+/**
 import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveSubsystem;
 //import frc.robot.subsystems.LiftSubsystem;
 import frc.robot.subsystems.WristSubsystem;
-
+*/
 public class TriMotorTestCommand extends CommandBase {
  /**   
     // private LiftSubsystem liftSubsystem;

@@ -10,11 +10,8 @@ public class IntakeCommand extends CommandBase {
     private final IntakeSubsystem intakeSubsystem;
     private DoubleSupplier inSpeed;
     private DoubleSupplier outSpeed;
-    private DoubleSupplier negativeIntakeSpeed;
 
-    public IntakeCommand(IntakeSubsystem intakeSubsystem, DoubleSupplier inSpeed, DoubleSupplier outSpeed) { // DoubleSupplier
-                                                                                                             // negativeIntakeSpeed)
-                                                                                                             // {
+    public IntakeCommand(IntakeSubsystem intakeSubsystem, DoubleSupplier inSpeed, DoubleSupplier outSpeed) {
         this.intakeSubsystem = intakeSubsystem;
         this.inSpeed = inSpeed;
         this.outSpeed = outSpeed;
@@ -25,11 +22,6 @@ public class IntakeCommand extends CommandBase {
 
     @Override
     public void execute() {
-        // double speed = intakeSpeed.getAsDouble() >= 0.1 ? intakeSpeed.getAsDouble() :
-        // // fall back to reverse if not outside deadzone
-        // (negativeIntakeSpeed.getAsDouble() >= 0.1 ?
-        // -negativeIntakeSpeed.getAsDouble() : 0); // negative reverse trigger speed if
-        // outside deadzone
         double in = inSpeed.getAsDouble();
         double out = outSpeed.getAsDouble();
         double speed = 0;
@@ -41,7 +33,7 @@ public class IntakeCommand extends CommandBase {
         } else {
             speed = 0;
         }
-        
+
         intakeSubsystem.setIntakeSpeed(speed);
     }
 
