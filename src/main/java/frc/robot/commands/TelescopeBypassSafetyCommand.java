@@ -3,20 +3,14 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.TelescopeSubsystem;
 
-public class TelescopeCommand extends CommandBase {
+public class TelescopeBypassSafetyCommand extends CommandBase {
+
+  private static final double SPEED = -0.3;
   private static final int INCREMENT = 5;
   TelescopeSubsystem telescopeSubsystem;
-
-  private final boolean rightBumper;
-  private final boolean leftBumper;
   double startingPosition;
 
-  private static final double SPEED = 0.5;
-
-  public TelescopeCommand(TelescopeSubsystem telescopeSubsystem, boolean rightBumper,
-      boolean leftBumper) {
-    this.rightBumper = rightBumper;
-    this.leftBumper = leftBumper;
+  public TelescopeBypassSafetyCommand(TelescopeSubsystem telescopeSubsystem) {
     this.telescopeSubsystem = telescopeSubsystem;
 
     addRequirements(telescopeSubsystem);
@@ -31,19 +25,10 @@ public class TelescopeCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
-    if (rightBumper && !leftBumper) {
-
-      telescopeSubsystem.setTelescopeSpeed(-SPEED, false);
-    } else if (!rightBumper && leftBumper) {
-      telescopeSubsystem.setTelescopeSpeed(SPEED, false);
-    } else {
-      telescopeSubsystem.setTelescopeSpeed(0, false);
-
-    }
-
+    telescopeSubsystem.setTelescopeSpeed(SPEED, true);
   }
 
+  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     telescopeSubsystem.setTelescopeSpeed(0, false);
@@ -52,9 +37,7 @@ public class TelescopeCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (rightBumper && telescopeSubsystem.getTelescopeEncoderPosition() <= startingPosition - INCREMENT) {
-      return true;
-    } else if (leftBumper && telescopeSubsystem.getTelescopeEncoderPosition() >= startingPosition + INCREMENT) {
+    if (telescopeSubsystem.getTelescopeEncoderPosition() <= startingPosition - INCREMENT) {
       return true;
     } else {
       return false;

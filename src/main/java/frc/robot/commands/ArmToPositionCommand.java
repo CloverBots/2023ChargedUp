@@ -32,7 +32,7 @@ public class ArmToPositionCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    armSubsystem.resetEncoder();
+    
     direction = 1; // going up
     if (armSubsystem.getArmEncoderPosition() > position) {
       direction = -1; // going down

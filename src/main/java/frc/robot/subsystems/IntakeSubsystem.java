@@ -1,37 +1,43 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMax.SoftLimitDirection;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.IDs;
 
 public class IntakeSubsystem extends SubsystemBase {
+    private final int CURRENT_LIMIT = 30;
 
-    private static final double DEFAULT_INTAKE_SPEED = 1.0;
-    private final TalonSRX intakeMotor = new TalonSRX(IDs.INTAKE_LEAD_DEVICE);
-    private double speed;
+    private final CANSparkMax motor = new CANSparkMax(IDs.INTAKE_DEVICE, MotorType.kBrushless);
 
+    /**
+     * Constructs a new {@link IntakeSubsystem} instance.
+     */
     public IntakeSubsystem() {
+        motor.setSmartCurrentLimit(CURRENT_LIMIT);
+
+        motor.setIdleMode(IdleMode.kBrake);
+
+        motor.setInverted(false);
     }
 
-    @Override
-    public void periodic() {
-        // This method will be called once per scheduler run
-        intakeMotor.set(TalonSRXControlMode.PercentOutput, speed);
+    public void setIntakeSpeed(double speed) {
+        motor.set(speed);
     }
 
-
-    public void startIntake(double speed) {
-        this.speed = speed;
+    public double getIntakeEncoderPosition() {
+        return motor.getEncoder().getPosition(); 
     }
 
-    public void startIntake() {
-        startIntake(DEFAULT_INTAKE_SPEED);
+    public void setIntakeMaximumPosition(double min, double max) {
+        motor.setSoftLimit(SoftLimitDirection.kForward, (float) max);
+        motor.setSoftLimit(SoftLimitDirection.kForward, (float) min);
     }
 
-    public void stop() {
-        speed = 0;
-        intakeMotor.set(TalonSRXControlMode.PercentOutput, 0);
+    public void resetEncoder() {
+        motor.getEncoder().setPosition(0);
     }
 }

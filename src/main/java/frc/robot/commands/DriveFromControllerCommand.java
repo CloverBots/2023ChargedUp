@@ -11,12 +11,12 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveSubsystem;
 
 public class DriveFromControllerCommand extends CommandBase {
-  private static final double SLOW_FORWARD_RATIO = .2;
+  private static final double SLOW_FORWARD_RATIO = .3;
   private static final double SLOW_FORWARD_CURVE = 1.5;
   private static final double SLOW_ROTATION_RATIO = .3;
   private static final double SLOW_ROTATION_CURVE = 2;
 
-  private static final double DEFAULT_FOWARD_RATIO = .7;//0.7  smaller = less power
+  private static final double DEFAULT_FOWARD_RATIO = 0.7;//0.7  smaller = less power
   private static final double DEFAULT_FORWARD_CURVE = 3; //1.5 larger = more controll at small joystick values
   private static final double DEFAULT_ROTATION_RATIO = 0.6; //0.6
   private static final double DEFAULT_ROTATION_CURVE = 3; //2
@@ -25,6 +25,7 @@ public class DriveFromControllerCommand extends CommandBase {
   private final DoubleSupplier forward;
   private final DoubleSupplier rotation;
   private final DoubleSupplier slowModeTrigger;
+  private final DoubleSupplier fullSpeedTrigger;
 
   /**
    * Constructs a new {@link DriveFromControllerCommand} instance.
@@ -38,12 +39,13 @@ public class DriveFromControllerCommand extends CommandBase {
       DriveSubsystem driveSubsystem,
       DoubleSupplier forward,
       DoubleSupplier rotation,
-      DoubleSupplier slowModeTrigger) {
+      DoubleSupplier slowModeTrigger,
+      DoubleSupplier fullSpeedTrigger) {
     this.driveSubsystem = driveSubsystem;
     this.forward = forward;
     this.rotation = rotation;
     this.slowModeTrigger = slowModeTrigger;
-
+    this.fullSpeedTrigger = fullSpeedTrigger;
     addRequirements(driveSubsystem);
   }
 
@@ -61,15 +63,23 @@ public class DriveFromControllerCommand extends CommandBase {
       forwardCurve = SLOW_FORWARD_CURVE;
       rotationRatio = SLOW_ROTATION_RATIO;
       rotationCurve = SLOW_ROTATION_CURVE;
-    } else {
+    } else if (fullSpeedTrigger.getAsDouble() > .3) {
       forwardRatio = DEFAULT_FOWARD_RATIO;
       forwardCurve = DEFAULT_FORWARD_CURVE;
       rotationRatio = DEFAULT_ROTATION_RATIO;
       rotationCurve = DEFAULT_ROTATION_CURVE;
+    } else {
+      forwardRatio = (DEFAULT_FOWARD_RATIO + SLOW_FORWARD_RATIO) / 2.0 -.05; // Average, in-between (but adjusted).
+      forwardCurve = SLOW_FORWARD_CURVE;
+      rotationRatio = (DEFAULT_ROTATION_RATIO + SLOW_ROTATION_RATIO) / 2.0; // Average
+      rotationCurve = SLOW_ROTATION_CURVE;
     }
     SmartDashboard.putNumber("drive encoder", driveSubsystem.getAverageEncoderPosition());
+    if (fullSpeedTrigger.getAsDouble() > .3) {
+      forwardRatio = 1.0;
+    }
     driveSubsystem.arcadeDrive(
-        -computeInputCurve(forwardRatio * forward.getAsDouble(), forwardCurve),
+        computeInputCurve(forwardRatio * forward.getAsDouble(), forwardCurve),
         computeInputCurve(rotationRatio * rotation.getAsDouble(), rotationCurve));
   }
 
