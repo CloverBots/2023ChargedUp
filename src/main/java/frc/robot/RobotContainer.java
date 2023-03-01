@@ -187,13 +187,13 @@ public class RobotContainer {
     SmartDashboard.putData("Autonomous Mode", chooser);
     SmartDashboard.putNumber("Auto Wait Time", 0);
 
-    chooser.setDefaultOption("AutoScoreChargeCommand", new AutoScoreChargeCommand(
+    chooser.addOption("AutoScoreChargeCommand", new AutoScoreChargeCommand(
         armSubsystem,
         driveSubsystem,
         intakeSubsystem,
         telescopeSubsystem,
         wristSubsystem));
-    chooser.addOption("AutoScoreExitCommand", new AutoScoreExitCommand(
+    chooser.setDefaultOption("AutoScoreExitCommand", new AutoScoreExitCommand(
         armSubsystem,
         driveSubsystem,
         intakeSubsystem,
