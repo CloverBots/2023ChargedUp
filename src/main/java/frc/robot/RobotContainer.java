@@ -70,15 +70,15 @@ public class RobotContainer {
 
   private final IntakeToPositionCommand intakeToHighPositionCommand = new IntakeToPositionCommand(armSubsystem,
       telescopeSubsystem, wristSubsystem,
-      64, 0.5, // 67
-      190, 1.0, // 190
+      64, 0.7, // 67
+      107, 1.0, // 100
       40, 0.3, // 40
       10, 3); // 10
 
   private final IntakeToPositionCommand intakeToMiddlePositionCommand = new IntakeToPositionCommand(armSubsystem,
       telescopeSubsystem, wristSubsystem,
       55, 0.5, // 55
-      53, 0.5, // 50
+      28, 0.5, // 25
       40, 1.0, // 30
       10, 3); // 5
 
@@ -92,14 +92,14 @@ public class RobotContainer {
   private final IntakeToPositionCommand intakeToHomePositionCommand = new IntakeToPositionCommand(armSubsystem,
       telescopeSubsystem, wristSubsystem,
       0, 0.3, // 0
-      0, 0.8, // 0
+      5, 0.8, // 0
       0, 0.3, // 0
       0, 3); // 0
 
   private final IntakeToPositionCommand intakeToGroundPositionCommand = new IntakeToPositionCommand(armSubsystem,
       telescopeSubsystem, wristSubsystem,
       30, 0.3, // 30
-      140, 1.0, // 140
+      34, 1.0, // 34
       -30, 0.5, // -30
       15, 1); // 15
 
@@ -117,7 +117,7 @@ public class RobotContainer {
     armSubsystem.setDefaultCommand(armCommand);
     wristSubsystem.setDefaultCommand(wristCommand);
     intakeSubsystem.setDefaultCommand(intakeCommand);
-
+   
     configureTriggerBindings();
     configureChooserModes();
 

@@ -10,7 +10,7 @@ import frc.robot.subsystems.WristSubsystem;
 
 public class AutoScoreChargeCommand extends SequentialCommandGroupExtended {
   private final static double DRIVE_SPEED = .5; // tune both speeds
-  private final static double DISTANCE = -2.73; // -2.75, -4
+  private final static double DISTANCE = -3.15; // -2.73, -4, -3.15(fresh tread), -3.2(worn out)
 
   /** Creates a new AutoScoreCharge. */
   public AutoScoreChargeCommand(
@@ -34,8 +34,8 @@ public class AutoScoreChargeCommand extends SequentialCommandGroupExtended {
     addInstant(() -> intakeSubsystem.setIntakeSpeed(0), intakeSubsystem);
 
     addCommands(new IntakeToPositionCommand(armSubsystem, telescopeSubsystem, wristSubsystem,
-        0, 0.5, // 0
-        0, 1.0, // 0
+        0, 0.3, // 0
+        0, 0.7, // 0
         0, 0.3, // 0
         0, 3)); // 0)
 
