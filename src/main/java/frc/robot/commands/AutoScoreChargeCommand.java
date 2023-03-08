@@ -9,8 +9,12 @@ import frc.robot.subsystems.TelescopeSubsystem;
 import frc.robot.subsystems.WristSubsystem;
 
 public class AutoScoreChargeCommand extends SequentialCommandGroupExtended {
-  private final static double DRIVE_SPEED = .5; // tune both speeds
-  private final static double DISTANCE = -2.73; // -2.75, -4
+  private final static double DRIVE_SPEED = .4; // .5
+  private final static double DISTANCE = -2.4; // -2.73
+  private final static double BALANCE_DISTANCE = -0.3;
+  private final static double BALANCE_SPEED = .2;
+  private final static double BACKUP_DISTANCE = .05;
+  private final static double BACKUP_SPEED = .1;
 
   /** Creates a new AutoScoreCharge. */
   public AutoScoreChargeCommand(
@@ -40,7 +44,8 @@ public class AutoScoreChargeCommand extends SequentialCommandGroupExtended {
         0, 3)); // 0)
 
     addCommands(new DriveToDistanceCommand(driveSubsystem, DISTANCE, DRIVE_SPEED, 0, 0.1));
-
-    // addCommands(new AutoBalanceCommand(driveSubsystem));
+    addCommands(new DriveToBalanceCommand(driveSubsystem, BALANCE_DISTANCE, BALANCE_SPEED));
+    addCommands(new WaitCommand(1));
+    addCommands(new DriveToDistanceCommand(driveSubsystem, BACKUP_DISTANCE, BACKUP_SPEED, 0, 0.01));
   }
 }
