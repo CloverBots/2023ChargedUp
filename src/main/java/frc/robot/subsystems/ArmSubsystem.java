@@ -10,6 +10,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.IDs;
+import frc.robot.RobotContainer;
 
 public class ArmSubsystem extends SubsystemBase {
   private final int CURRENT_LIMIT = 20;
@@ -79,7 +80,7 @@ public class ArmSubsystem extends SubsystemBase {
     }
     final double pos = getArmEncoderPosition();
     
-    double adjustedSpeed = calculateAdjustedMotorSpeed(
+    double adjustedSpeed = RobotContainer.calculateAdjustedMotorSpeed(
       pos,
       UPPER_ENDPOINT,
       LOWER_ENDPOINT,
@@ -98,20 +99,6 @@ public class ArmSubsystem extends SubsystemBase {
     else motor.set(speed);
     */
     motor.set(adjustedSpeed);
-  }
-
-
-  private double calculateAdjustedMotorSpeed(double currentPosition, double upper, double lower, double margin, double currentPower, double powerAtEndpoint) {
-    powerAtEndpoint = Math.copySign(powerAtEndpoint, currentPower);
-    if (currentPower <= powerAtEndpoint) return currentPower;
-    double coefficient = (powerAtEndpoint - currentPower) / Math.pow(margin, 2);
-    if (currentPosition >= lower && currentPosition <= lower + margin) {
-      return coefficient * Math.pow(currentPosition - (lower + margin), 2) + currentPower;
-    }
-    else if (currentPosition >= upper-margin && currentPosition <= upper) {
-      return coefficient * Math.pow(currentPosition - (upper - margin), 2) + currentPower;
-    }
-    else return currentPower;
   }
 
   public double getArmEncoderPosition() {

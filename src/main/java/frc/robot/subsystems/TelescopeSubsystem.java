@@ -12,31 +12,29 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.IDs;
+import frc.robot.RobotContainer;
 
 public class TelescopeSubsystem extends SubsystemBase {
-  private final int CURRENT_LIMIT = 10;
+  private final int CURRENT_LIMIT = 15;
 
   private final CANSparkMax leadMotor = new CANSparkMax(IDs.TELESCOPE_DEVICE_LEAD, MotorType.kBrushless);
   private final CANSparkMax followMotor = new CANSparkMax(IDs.TELESCOPE_DEVICE_FOLLOW, MotorType.kBrushless);
 
   public static final double LOWER_ENDPOINT = 2; // 0, (slightly above 0 to prevent overshoot)
 
-  public static final double UPPER_ENDPOINT = 230; // 236
+  public static final double UPPER_ENDPOINT = 112; // 236
 
+  private static final double MARGIN = 15;
   /**
    * Constructs a new {@link TelescopeSubsystem} instance.
    */
   public TelescopeSubsystem() {
     leadMotor.setSmartCurrentLimit(CURRENT_LIMIT);
-
     leadMotor.setIdleMode(IdleMode.kBrake);
-
     leadMotor.setInverted(false);
 
     followMotor.setSmartCurrentLimit(CURRENT_LIMIT);
-
     followMotor.setIdleMode(IdleMode.kBrake);
-
     followMotor.setInverted(false);
 
     followMotor.follow(leadMotor);
@@ -56,7 +54,15 @@ public class TelescopeSubsystem extends SubsystemBase {
       }
     }
     
-    leadMotor.set(speed);
+    double adjustedSpeed = RobotContainer.calculateAdjustedMotorSpeed(
+      getTelescopeEncoderPosition(),
+      UPPER_ENDPOINT,
+      LOWER_ENDPOINT,
+      MARGIN,
+      speed,
+      0.1
+    );
+    leadMotor.set(adjustedSpeed);
   }
 
   public double getTelescopeEncoderPosition() {

@@ -33,17 +33,17 @@ public class ArmCommand extends CommandBase {
   @Override
   public void execute() {
 
-    double armSpeed = -leftJoystickY.getAsDouble() * .5; //negative because joystick Y is negative for forward push of joystick
+    double armSpeed = -leftJoystickY.getAsDouble() * .8; //negative because joystick Y is negative for forward push of joystick
+    armSubsystem.setArmSpeed(armSpeed);
+    // if (Math.abs(armSpeed) > 0.05) {
     
-    if (Math.abs(armSpeed) > 0.05) {
-    
-      if (armSubsystem.getArmEncoderPosition() - ArmSubsystem.LOWER_ENDPOINT < APPROACH_ENCODER_LIMIT
-          || ArmSubsystem.UPPER_ENDPOINT - armSubsystem.getArmEncoderPosition() < APPROACH_ENCODER_LIMIT) {
-        armSpeed = Math.min(Math.max(armSpeed, -APPROACH_MAX_SPEED), APPROACH_MAX_SPEED);
-      }
+    //   if (armSubsystem.getArmEncoderPosition() - ArmSubsystem.LOWER_ENDPOINT < APPROACH_ENCODER_LIMIT
+    //       || ArmSubsystem.UPPER_ENDPOINT - armSubsystem.getArmEncoderPosition() < APPROACH_ENCODER_LIMIT) {
+    //     armSpeed = Math.min(Math.max(armSpeed, -APPROACH_MAX_SPEED), APPROACH_MAX_SPEED);
+    //   }
       
-        armSubsystem.setArmSpeed(armSpeed);
-    } else armSubsystem.setArmSpeed(0);
+    //     armSubsystem.setArmSpeed(armSpeed);
+    // } else armSubsystem.setArmSpeed(0);
   }
 
   // Called once the command ends or is interrupted.

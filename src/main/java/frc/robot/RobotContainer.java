@@ -70,15 +70,15 @@ public class RobotContainer {
 
   private final IntakeToPositionCommand intakeToHighPositionCommand = new IntakeToPositionCommand(armSubsystem,
       telescopeSubsystem, wristSubsystem,
-      64, 0.5, // 67
-      190, 1.0, // 190
+      64, 0.7, // 67
+      95, 0.8, // 190
       40, 0.3, // 40
       10, 3); // 10
 
   private final IntakeToPositionCommand intakeToMiddlePositionCommand = new IntakeToPositionCommand(armSubsystem,
       telescopeSubsystem, wristSubsystem,
       55, 0.5, // 55
-      53, 0.5, // 50
+      26, 0.5, // 50
       40, 1.0, // 30
       10, 3); // 5
 
@@ -98,7 +98,7 @@ public class RobotContainer {
 
   private final IntakeToPositionCommand intakeToGroundPositionCommand = new IntakeToPositionCommand(armSubsystem,
       telescopeSubsystem, wristSubsystem,
-      30, 0.3, // 30
+      30, 0.7, // 30
       140, 1.0, // 140
       -30, 0.5, // -30
       15, 1); // 15
@@ -180,6 +180,25 @@ public class RobotContainer {
     POVButton dPadDownButton = new POVButton(driverController, 180); // down
     dPadDownButton.onTrue(telescopeBypassSafetyCommand);
 
+  }
+
+  public static double calculateAdjustedMotorSpeed(
+    double currentPosition,
+    double upper,
+    double lower,
+    double margin,
+    double currentPower,
+    double powerAtEndpoint) {
+    if (Math.abs(currentPower) <= powerAtEndpoint) return currentPower;
+    powerAtEndpoint = Math.copySign(powerAtEndpoint, currentPower);
+    double coefficient = (powerAtEndpoint - currentPower) / Math.pow(margin, 2);
+    if (currentPosition >= lower && currentPosition <= lower + margin) {
+      return coefficient * Math.pow(currentPosition - (lower + margin), 2) + currentPower;
+    }
+    else if (currentPosition >= upper-margin && currentPosition <= upper) {
+      return coefficient * Math.pow(currentPosition - (upper - margin), 2) + currentPower;
+    }
+    else return currentPower;
   }
 
   private void configureChooserModes() {

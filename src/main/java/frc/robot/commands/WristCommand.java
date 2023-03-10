@@ -39,16 +39,7 @@ public class WristCommand extends CommandBase {
 
     double wristSpeed = -rightJoystickY.getAsDouble() * .5; //negative because joystick Y gives negative value when pushing it forward
     
-    if (Math.abs(wristSpeed) > 0.05) {
-
-
-      if (wristSubsystem.getWristEncoderPosition() - WristSubsystem.LOWER_ENDPOINT < APPROACH_ENCODER_LIMIT
-          || WristSubsystem.UPPER_ENDPOINT - wristSubsystem.getWristEncoderPosition() < APPROACH_ENCODER_LIMIT) {
-        wristSpeed = Math.min(Math.max(wristSpeed, -APPROACH_MAX_SPEED), APPROACH_MAX_SPEED);
-      }
-      
-        wristSubsystem.setWristSpeed(wristSpeed);
-    } else wristSubsystem.setWristSpeed(0);
+    wristSubsystem.setWristSpeed(wristSpeed);
   } 
 
   // Called once the command ends or is interrupted.
