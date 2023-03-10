@@ -20,6 +20,10 @@ public class ArmSubsystem extends SubsystemBase {
 
   public static final double UPPER_ENDPOINT = 76; // 76
 
+  public static final double SLOWDOWN_MARGIN = 15;
+
+  public static final double POWER_AT_ENDPOINT = 0.1;
+
   TimeOfFlight bottomDistanceSensor = new TimeOfFlight(0);
   TimeOfFlight topDistanceSensor = new TimeOfFlight(1);
 
@@ -72,8 +76,18 @@ public class ArmSubsystem extends SubsystemBase {
     if ((getArmEncoderPosition() <= LOWER_ENDPOINT && speed < 0) ||
           (getArmEncoderPosition() >= UPPER_ENDPOINT && speed > 0)) {
         speed = 0;
-      }
-
+    }
+    final double pos = getArmEncoderPosition();
+    
+    double adjustedSpeed = calculateAdjustedMotorSpeed(
+      pos,
+      UPPER_ENDPOINT,
+      LOWER_ENDPOINT,
+      SLOWDOWN_MARGIN,
+      speed,
+      POWER_AT_ENDPOINT
+    );
+    SmartDashboard.putNumber("Adjusted Speed", adjustedSpeed);
     double range = bottomDistanceSensor.getRange();
     
     SmartDashboard.putNumber("Distance Sensor (Arm)", range);
@@ -83,7 +97,21 @@ public class ArmSubsystem extends SubsystemBase {
 
     else motor.set(speed);
     */
-    motor.set(speed);
+    motor.set(adjustedSpeed);
+  }
+
+
+  private double calculateAdjustedMotorSpeed(double currentPosition, double upper, double lower, double margin, double currentPower, double powerAtEndpoint) {
+    powerAtEndpoint = Math.copySign(powerAtEndpoint, currentPower);
+    if (currentPower <= powerAtEndpoint) return currentPower;
+    double coefficient = (powerAtEndpoint - currentPower) / Math.pow(margin, 2);
+    if (currentPosition >= lower && currentPosition <= lower + margin) {
+      return coefficient * Math.pow(currentPosition - (lower + margin), 2) + currentPower;
+    }
+    else if (currentPosition >= upper-margin && currentPosition <= upper) {
+      return coefficient * Math.pow(currentPosition - (upper - margin), 2) + currentPower;
+    }
+    else return currentPower;
   }
 
   public double getArmEncoderPosition() {
