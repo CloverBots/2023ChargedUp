@@ -16,7 +16,8 @@ import frc.robot.IDs;
 public class TelescopeSubsystem extends SubsystemBase {
   private final int CURRENT_LIMIT = 10;
 
-  private final CANSparkMax motor = new CANSparkMax(IDs.TELESCOPE_DEVICE, MotorType.kBrushless);
+  private final CANSparkMax leadMotor = new CANSparkMax(IDs.TELESCOPE_DEVICE_LEAD, MotorType.kBrushless);
+  private final CANSparkMax followMotor = new CANSparkMax(IDs.TELESCOPE_DEVICE_FOLLOW, MotorType.kBrushless);
 
   public static final double LOWER_ENDPOINT = 2; // 0, (slightly above 0 to prevent overshoot)
 
@@ -26,11 +27,19 @@ public class TelescopeSubsystem extends SubsystemBase {
    * Constructs a new {@link TelescopeSubsystem} instance.
    */
   public TelescopeSubsystem() {
-    motor.setSmartCurrentLimit(CURRENT_LIMIT);
+    leadMotor.setSmartCurrentLimit(CURRENT_LIMIT);
 
-    motor.setIdleMode(IdleMode.kBrake);
+    leadMotor.setIdleMode(IdleMode.kBrake);
 
-    motor.setInverted(false);
+    leadMotor.setInverted(false);
+
+    followMotor.setSmartCurrentLimit(CURRENT_LIMIT);
+
+    followMotor.setIdleMode(IdleMode.kBrake);
+
+    followMotor.setInverted(false);
+
+    followMotor.follow(leadMotor);
 
     // setTelescopeMaximumPosition(LOWER_ENDPOINT, UPPER_ENDPOINT);
   }
@@ -47,20 +56,20 @@ public class TelescopeSubsystem extends SubsystemBase {
       }
     }
     
-    motor.set(speed);
+    leadMotor.set(speed);
   }
 
   public double getTelescopeEncoderPosition() {
-    return motor.getEncoder().getPosition(); // negative because motor flipped
+    return leadMotor.getEncoder().getPosition(); // negative because motor flipped
   }
 
   public void setTelescopeMaximumPosition(double min, double max) {
-    motor.setSoftLimit(SoftLimitDirection.kForward, (float) max);
-    motor.setSoftLimit(SoftLimitDirection.kReverse, (float) min);
+    leadMotor.setSoftLimit(SoftLimitDirection.kForward, (float) max);
+    leadMotor.setSoftLimit(SoftLimitDirection.kReverse, (float) min);
   }
 
   public void resetEncoder() {
-    motor.getEncoder().setPosition(0);
+    leadMotor.getEncoder().setPosition(0);
   }
 
 }
