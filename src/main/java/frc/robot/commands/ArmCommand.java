@@ -12,8 +12,7 @@ import frc.robot.subsystems.ArmSubsystem;
 public class ArmCommand extends CommandBase {
   private final ArmSubsystem armSubsystem;
   private final DoubleSupplier leftJoystickY;
-  private final double APPROACH_MAX_SPEED = 0.2;
-  private final int APPROACH_ENCODER_LIMIT = 30;
+
   /** Creates a new ArmCommand. */
   public ArmCommand(ArmSubsystem armSubsystem, DoubleSupplier leftJoystickY) {
     this.armSubsystem = armSubsystem;
@@ -34,6 +33,11 @@ public class ArmCommand extends CommandBase {
   public void execute() {
 
     double armSpeed = -leftJoystickY.getAsDouble() * .8; //negative because joystick Y is negative for forward push of joystick
+
+    if (Math.abs(armSpeed) < 0.05) { //dead-zone to prevent controller drift
+      armSpeed = 0;
+    }
+    
     armSubsystem.setArmSpeed(armSpeed);
     // if (Math.abs(armSpeed) > 0.05) {
     

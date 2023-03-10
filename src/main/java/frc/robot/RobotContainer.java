@@ -63,6 +63,7 @@ public class RobotContainer {
   private final WristCommand wristCommand = new WristCommand(wristSubsystem, operatorController::getRightY);
   private final TelescopeBypassSafetyCommand telescopeBypassSafetyCommand = new TelescopeBypassSafetyCommand(
       telescopeSubsystem);
+    private final TelescopeCommand telescopeInCommand = new TelescopeCommand(telescopeSubsystem, true, false);
 
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
   private final IntakeCommand intakeCommand = new IntakeCommand(intakeSubsystem,
@@ -143,7 +144,7 @@ public class RobotContainer {
     balance.whileTrue(new AutoBalanceCommand(driveSubsystem));
 
     JoystickButton telescopeInButton = new JoystickButton(operatorController, Button.kRightBumper.value);
-    telescopeInButton.whileTrue(new TelescopeCommand(telescopeSubsystem, true, false));
+    telescopeInButton.whileTrue(telescopeInCommand);
 
     JoystickButton telescopeOutButton = new JoystickButton(operatorController, Button.kLeftBumper.value);
     telescopeOutButton.whileTrue(new TelescopeCommand(telescopeSubsystem, false, true));
