@@ -63,7 +63,10 @@ public class RobotContainer {
   private final WristCommand wristCommand = new WristCommand(wristSubsystem, operatorController::getRightY);
   private final TelescopeBypassSafetyCommand telescopeBypassSafetyCommand = new TelescopeBypassSafetyCommand(
       telescopeSubsystem);
-    private final TelescopeCommand telescopeInCommand = new TelescopeCommand(telescopeSubsystem, true, false);
+  private final TelescopeCommand telescopeInCommand = new TelescopeCommand(telescopeSubsystem, true, false);
+  private final TelescopeCommand telescopeOutCommand = new TelescopeCommand(telescopeSubsystem, false, true);
+  private final TelescopeCommand telescopeStopCommand = new TelescopeCommand(telescopeSubsystem, false, false);
+
 
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
   private final IntakeCommand intakeCommand = new IntakeCommand(intakeSubsystem,
@@ -99,8 +102,8 @@ public class RobotContainer {
 
   private final IntakeToPositionCommand intakeToGroundPositionCommand = new IntakeToPositionCommand(armSubsystem,
       telescopeSubsystem, wristSubsystem,
-      30, 0.7, // 30
-      140, 1.0, // 140
+      30, 0.5, // 30
+      70, 0.8, // 140
       -30, 0.5, // -30
       15, 1); // 15
 
@@ -144,10 +147,12 @@ public class RobotContainer {
     balance.whileTrue(new AutoBalanceCommand(driveSubsystem));
 
     JoystickButton telescopeInButton = new JoystickButton(operatorController, Button.kRightBumper.value);
-    telescopeInButton.whileTrue(telescopeInCommand);
+    telescopeInButton.onTrue(telescopeInCommand);
+    telescopeInButton.onFalse(telescopeStopCommand);
 
     JoystickButton telescopeOutButton = new JoystickButton(operatorController, Button.kLeftBumper.value);
-    telescopeOutButton.whileTrue(new TelescopeCommand(telescopeSubsystem, false, true));
+    telescopeOutButton.onTrue(telescopeOutCommand);
+    telescopeOutButton.onFalse(telescopeStopCommand);
 
     // JoystickButton driveToCollisionButton = new JoystickButton(driverController,
     // XboxController.Button.kY.value);
@@ -207,13 +212,13 @@ public class RobotContainer {
     SmartDashboard.putData("Autonomous Mode", chooser);
     SmartDashboard.putNumber("Auto Wait Time", 0);
 
-    chooser.addOption("AutoScoreChargeCommand", new AutoScoreChargeCommand(
+    chooser.setDefaultOption("AutoScoreChargeCommand", new AutoScoreChargeCommand(
         armSubsystem,
         driveSubsystem,
         intakeSubsystem,
         telescopeSubsystem,
         wristSubsystem));
-    chooser.setDefaultOption("AutoScoreExitCommand", new AutoScoreExitCommand(
+    chooser.addOption("AutoScoreExitCommand", new AutoScoreExitCommand(
         armSubsystem,
         driveSubsystem,
         intakeSubsystem,

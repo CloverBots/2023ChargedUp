@@ -14,6 +14,7 @@ public class DriveToBalanceCommand extends CommandBase {
     private final double speed;
     private NavXGyro gyro;
     private double currentRoll;
+    private double initialRoll;
 
     /**
      * Creates a new DriveToDistance.
@@ -36,12 +37,13 @@ public class DriveToBalanceCommand extends CommandBase {
     @Override
     public void initialize() {
         driveSubsystem.resetEncoders();
-        gyro.reset();
+        initialRoll = gyro.getRoll();
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
+        System.out.println(gyro.getRoll());
         double distanceTraveled = driveSubsystem.getAverageEncoderPosition();
         SmartDashboard.putNumber("Distance Traveled", distanceTraveled);
         driveSubsystem.autoDrive(speed, 0);
@@ -60,9 +62,11 @@ public class DriveToBalanceCommand extends CommandBase {
     public boolean isFinished() {
         currentRoll = gyro.getRoll();
         double distanceTraveled = driveSubsystem.getAverageEncoderPosition();
-        if (distanceTraveled >= distance) {
+        if (Math.abs(distanceTraveled) >= Math.abs(distance)) {
+            System.out.println("Finishing due to distance");
             return true;
-        } else if (Math.abs(currentRoll) > 3){
+        } else if (Math.abs(currentRoll - initialRoll) > 5){
+            System.out.println("Finishing due to roll");
             return true;
         } else {
             return false;

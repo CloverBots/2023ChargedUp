@@ -25,6 +25,8 @@ public class TelescopeSubsystem extends SubsystemBase {
   public static final double UPPER_ENDPOINT = 112; // 236
 
   private static final double MARGIN = 15;
+
+  private double adjustedSpeed = 0;
   /**
    * Constructs a new {@link TelescopeSubsystem} instance.
    */
@@ -54,7 +56,7 @@ public class TelescopeSubsystem extends SubsystemBase {
       }
     }
     
-    double adjustedSpeed = RobotContainer.calculateAdjustedMotorSpeed(
+    adjustedSpeed = RobotContainer.calculateAdjustedMotorSpeed(
       getTelescopeEncoderPosition(),
       UPPER_ENDPOINT,
       LOWER_ENDPOINT,
@@ -78,4 +80,11 @@ public class TelescopeSubsystem extends SubsystemBase {
     leadMotor.getEncoder().setPosition(0);
   }
 
+  @Override
+  public void periodic() {
+    if ((getTelescopeEncoderPosition() <= LOWER_ENDPOINT && adjustedSpeed < 0) ||
+    (getTelescopeEncoderPosition() >= UPPER_ENDPOINT && adjustedSpeed > 0)) {
+      leadMotor.set(0);
+}
+  }
 }

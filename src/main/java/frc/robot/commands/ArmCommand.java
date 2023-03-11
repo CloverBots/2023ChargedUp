@@ -32,7 +32,7 @@ public class ArmCommand extends CommandBase {
   @Override
   public void execute() {
 
-    double armSpeed = -leftJoystickY.getAsDouble() * .8; //negative because joystick Y is negative for forward push of joystick
+    double armSpeed = -leftJoystickY.getAsDouble() * .5; //negative because joystick Y is negative for forward push of joystick
 
     if (Math.abs(armSpeed) < 0.05) { //dead-zone to prevent controller drift
       armSpeed = 0;

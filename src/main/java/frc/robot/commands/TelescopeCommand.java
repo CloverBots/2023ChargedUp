@@ -11,7 +11,7 @@ public class TelescopeCommand extends CommandBase {
   private final boolean leftBumper;
   double startingPosition;
 
-  private static final double SPEED = 0.5;
+  private static final double SPEED = 0.25;
 
   public TelescopeCommand(TelescopeSubsystem telescopeSubsystem, boolean rightBumper,
       boolean leftBumper) {
@@ -46,18 +46,19 @@ public class TelescopeCommand extends CommandBase {
 
   @Override
   public void end(boolean interrupted) {
-    telescopeSubsystem.setTelescopeSpeed(0, false);
+    //telescopeSubsystem.setTelescopeSpeed(0, false);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (rightBumper && telescopeSubsystem.getTelescopeEncoderPosition() <= startingPosition - INCREMENT) {
-      return true;
-    } else if (leftBumper && telescopeSubsystem.getTelescopeEncoderPosition() >= startingPosition + INCREMENT) {
-      return true;
-    } else {
-      return false;
-    }
+    return true;
+    // if (rightBumper && telescopeSubsystem.getTelescopeEncoderPosition() <= startingPosition - INCREMENT) {
+    //   return true;
+    // } else if (leftBumper && telescopeSubsystem.getTelescopeEncoderPosition() >= startingPosition + INCREMENT) {
+    //   return true;
+    // } else {
+    //   return true;
+    // }
   }
 }
