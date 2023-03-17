@@ -197,10 +197,7 @@ public class IntakeToPositionCommand extends CommandBase {
     // System.out.println("arm: " + armDone + ", telescope: " + telescopeDone + ",
     // wrist: " + wristDone);
 
-    if (armDirection == -1 && armDone && wristDone && telescopeDone) {
-      // arm moving down, done
-      return true;
-    } else if (!secondStage && armDirection == 1 && armDone && wristDone && telescopeDone) {
+    if (!secondStage && armDone && wristDone && telescopeDone) {
       // arm moving up and ready for second stage
       secondStage = true;
       if (secondSystem == 3) {
@@ -227,7 +224,7 @@ public class IntakeToPositionCommand extends CommandBase {
         }
       }
       return false;
-    } else if (secondStage && armDirection == 1 && armDone && wristDone && telescopeDone) {
+    } else if (secondStage && armDone && wristDone && telescopeDone) {
       // arm moving up and second stage is done so all done
       return true;
     } else {

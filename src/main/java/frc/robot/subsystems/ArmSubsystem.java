@@ -13,7 +13,7 @@ import frc.robot.IDs;
 import frc.robot.RobotContainer;
 
 public class ArmSubsystem extends SubsystemBase {
-  private final int CURRENT_LIMIT = 20;
+  private final int CURRENT_LIMIT = 30;
 
   private final CANSparkMax motor = new CANSparkMax(IDs.ARM_DEVICE, MotorType.kBrushless);
 

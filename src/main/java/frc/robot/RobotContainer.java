@@ -75,7 +75,7 @@ public class RobotContainer {
   private final IntakeToPositionCommand intakeToHighPositionCommand = new IntakeToPositionCommand(armSubsystem,
       telescopeSubsystem, wristSubsystem,
       64, 0.7, // 67
-      95, 0.8, // 190
+      111, 0.8, // 190
       40, 0.3, // 40
       10, 3); // 10
 
@@ -95,10 +95,10 @@ public class RobotContainer {
 
   private final IntakeToPositionCommand intakeToHomePositionCommand = new IntakeToPositionCommand(armSubsystem,
       telescopeSubsystem, wristSubsystem,
-      0, 0.3, // 0
+      10, 0.5, // 0
       0, 0.8, // 0
       0, 0.3, // 0
-      0, 3); // 0
+      0, 1); // 0
 
   private final IntakeToPositionCommand intakeToGroundPositionCommand = new IntakeToPositionCommand(armSubsystem,
       telescopeSubsystem, wristSubsystem,
@@ -106,6 +106,13 @@ public class RobotContainer {
       70, 0.8, // 140
       -30, 0.5, // -30
       15, 1); // 15
+
+  private final IntakeToPositionCommand intakeToRoombaPositionCommand = new IntakeToPositionCommand(armSubsystem,
+      telescopeSubsystem, wristSubsystem,
+      0, 0.5, //
+      0, 0.8, //
+      55, 0.5, // 
+      57.7, 2); //
 
   private final DriveFromControllerCommand driveFromController = new DriveFromControllerCommand(
       driveSubsystem,
@@ -176,6 +183,9 @@ public class RobotContainer {
 
     POVButton intakeToPositionHomeButton = new POVButton(operatorController, 180); // Down
     intakeToPositionHomeButton.onTrue(intakeToHomePositionCommand);
+
+    POVButton intakeToPositionRoombaButton = new POVButton(operatorController, 0); // Down
+    intakeToPositionRoombaButton.onTrue(intakeToRoombaPositionCommand);
 
     JoystickButton intakeToPositionGroundButton = new JoystickButton(operatorController,
         XboxController.Button.kA.value);
