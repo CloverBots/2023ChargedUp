@@ -8,19 +8,20 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.TelescopeSubsystem;
 import frc.robot.subsystems.WristSubsystem;
 
-public class AutoScoreExitCommand extends SequentialCommandGroupExtended {
+public class AutoLeftScoreExitCommand extends SequentialCommandGroupExtended {
   private final static double DRIVE_SPEED = 0.5; // tune both speeds
-  private final static double DISTANCE = -4; // measure distance
+  private final static double DISTANCE = -4.2; // measure distance
 
   /** Creates a new AutoScoreExit. */
-  public AutoScoreExitCommand(
+  public AutoLeftScoreExitCommand(
       ArmSubsystem armSubsystem,
       DriveSubsystem driveSubsystem,
       IntakeSubsystem intakeSubsystem,
       TelescopeSubsystem telescopeSubsystem,
       WristSubsystem wristSubsystem) {
 
-        addCommands(new IntakeToPositionCommand(armSubsystem, telescopeSubsystem,
+        
+    addCommands(new IntakeToPositionCommand(armSubsystem, telescopeSubsystem,
         wristSubsystem,
         64, 0.5, // 67
         190, 1.0, // 190
@@ -36,8 +37,9 @@ public class AutoScoreExitCommand extends SequentialCommandGroupExtended {
         0, 1.0, // 0
         0, 0.3, // 0
         0, 3)); // 0)
-
+  
     addCommands(new DriveToDistanceCommand(driveSubsystem, DISTANCE, DRIVE_SPEED, 0, 0.1));
-
+    
+    addCommands(new SpinToAngleCommand(driveSubsystem, -145, -.2));
   }
 }

@@ -17,7 +17,7 @@ public class WristSubsystem extends SubsystemBase {
 
   public static final double LOWER_ENDPOINT = -40; //0
 
-public static final double UPPER_ENDPOINT = 54; // 66
+public static final double UPPER_ENDPOINT = 60; // 66
   
   private static final double MARGIN = 15;
 

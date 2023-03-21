@@ -194,9 +194,6 @@ public class IntakeToPositionCommand extends CommandBase {
       wristSubsystem.setWristSpeed(0);
     }
 
-    // System.out.println("arm: " + armDone + ", telescope: " + telescopeDone + ",
-    // wrist: " + wristDone);
-
     if (!secondStage && armDone && wristDone && telescopeDone) {
       // arm moving up and ready for second stage
       secondStage = true;
@@ -207,7 +204,6 @@ public class IntakeToPositionCommand extends CommandBase {
         if (wristSubsystem.getWristEncoderPosition() - wristPosition > 1.5) {
           wristDirection = -1;
         }
-        System.out.println("wristPos: " + wristPosition + ", direction: " + wristDirection);
       } else if (secondSystem == 2) {
         telescopeDone = false;
         telescopeDirection = 1;

@@ -43,7 +43,6 @@ public class DriveToBalanceCommand extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        System.out.println(gyro.getRoll());
         double distanceTraveled = driveSubsystem.getAverageEncoderPosition();
         SmartDashboard.putNumber("Distance Traveled", distanceTraveled);
         driveSubsystem.autoDrive(speed, 0);

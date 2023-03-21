@@ -16,7 +16,8 @@ import frc.robot.VisionTargetTracker.LedMode;
 import frc.robot.commands.ArmCommand;
 import frc.robot.commands.AutoBalanceCommand;
 import frc.robot.commands.AutoScoreChargeCommand;
-import frc.robot.commands.AutoScoreExitCommand;
+import frc.robot.commands.AutoLeftScoreExitCommand;
+import frc.robot.commands.AutoRightScoreExitCommand;
 import frc.robot.commands.DriveFromControllerCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.IntakeToPositionCommand;
@@ -88,10 +89,10 @@ public class RobotContainer {
 
   private final IntakeToPositionCommand intakeToHumanPositionCommand = new IntakeToPositionCommand(armSubsystem,
       telescopeSubsystem, wristSubsystem,
-      57, 0.5, // 65
+      55, 0.5, // 65
       0, 0.6, // 0
-      10, 0.3, // 0
-      10, 3); // 0
+      23, 0.3, // 0
+      23, 3); // 0
 
   private final IntakeToPositionCommand intakeToHomePositionCommand = new IntakeToPositionCommand(armSubsystem,
       telescopeSubsystem, wristSubsystem,
@@ -112,7 +113,7 @@ public class RobotContainer {
       0, 0.5, //
       0, 0.8, //
       55, 0.5, // 
-      57.7, 2); //
+      75, 2); //
 
   private final DriveFromControllerCommand driveFromController = new DriveFromControllerCommand(
       driveSubsystem,
@@ -228,13 +229,18 @@ public class RobotContainer {
         intakeSubsystem,
         telescopeSubsystem,
         wristSubsystem));
-    chooser.addOption("AutoScoreExitCommand", new AutoScoreExitCommand(
+    chooser.addOption("AutoLeftScoreExitCommand", new AutoLeftScoreExitCommand(
         armSubsystem,
         driveSubsystem,
         intakeSubsystem,
         telescopeSubsystem,
         wristSubsystem));
-
+    chooser.addOption("AutoRightScoreExitCommand", new AutoRightScoreExitCommand(
+        armSubsystem,
+        driveSubsystem,
+        intakeSubsystem,
+        telescopeSubsystem,
+        wristSubsystem));
   }
 
   /**
