@@ -8,24 +8,19 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.TelescopeSubsystem;
 import frc.robot.subsystems.WristSubsystem;
 
-public class AutoScoreChargeCommand extends SequentialCommandGroupExtended {
-  private final static double DRIVE_SPEED = .5; // .4, .5, need to tune at competition
-  private final static double DISTANCE = -3.185; // -2.3, -3.18 for just distance // try -2.9
-  private final static double BALANCE_DISTANCE = -0.9;
-  private final static double BALANCE_SPEED = -.5; //-.2, must be negative to backwards
-  private final static double BACKUP_DISTANCE = .1;
-  private final static double BACKUP_SPEED = .2;
+public class AutoRightScoreExitCommand extends SequentialCommandGroupExtended {
+  private final static double DRIVE_SPEED = 0.5; // tune both speeds
+  private final static double DISTANCE = -4.2; // measure distance
 
-  /** Creates a new AutoScoreCharge. */
-  public AutoScoreChargeCommand(
+  /** Creates a new AutoScoreExit. */
+  public AutoRightScoreExitCommand(
       ArmSubsystem armSubsystem,
       DriveSubsystem driveSubsystem,
       IntakeSubsystem intakeSubsystem,
       TelescopeSubsystem telescopeSubsystem,
       WristSubsystem wristSubsystem) {
 
-    // Autonomous commands in running order
-
+        
     addCommands(new IntakeToPositionCommand(armSubsystem, telescopeSubsystem,
         wristSubsystem,
         64, 0.5, // 67
@@ -42,10 +37,8 @@ public class AutoScoreChargeCommand extends SequentialCommandGroupExtended {
         0, 1.0, // 0
         0, 0.3, // 0
         0, 3)); // 0)
-
+  
     addCommands(new DriveToDistanceCommand(driveSubsystem, DISTANCE, DRIVE_SPEED, 0, 0.1));
-    //addCommands(new DriveToBalanceCommand(driveSubsystem, BALANCE_DISTANCE, BALANCE_SPEED));
-    //addCommands(new WaitCommand(1));
-    //addCommands(new DriveToDistanceCommand(driveSubsystem, BACKUP_DISTANCE, BACKUP_SPEED, 0, 0.01));
+    
   }
 }

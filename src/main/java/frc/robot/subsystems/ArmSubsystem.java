@@ -10,15 +10,20 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.IDs;
+import frc.robot.RobotContainer;
 
 public class ArmSubsystem extends SubsystemBase {
-  private final int CURRENT_LIMIT = 20;
+  private final int CURRENT_LIMIT = 30;
 
   private final CANSparkMax motor = new CANSparkMax(IDs.ARM_DEVICE, MotorType.kBrushless);
 
   public static final double LOWER_ENDPOINT = 0; // 0.0
 
   public static final double UPPER_ENDPOINT = 76; // 76
+
+  public static final double SLOWDOWN_MARGIN = 15;
+
+  public static final double POWER_AT_ENDPOINT = 0.1;
 
   TimeOfFlight bottomDistanceSensor = new TimeOfFlight(0);
   TimeOfFlight topDistanceSensor = new TimeOfFlight(1);
@@ -72,8 +77,18 @@ public class ArmSubsystem extends SubsystemBase {
     if ((getArmEncoderPosition() <= LOWER_ENDPOINT && speed < 0) ||
           (getArmEncoderPosition() >= UPPER_ENDPOINT && speed > 0)) {
         speed = 0;
-      }
-
+    }
+    final double pos = getArmEncoderPosition();
+    
+    double adjustedSpeed = RobotContainer.calculateAdjustedMotorSpeed(
+      pos,
+      UPPER_ENDPOINT,
+      LOWER_ENDPOINT,
+      SLOWDOWN_MARGIN,
+      speed,
+      POWER_AT_ENDPOINT
+    );
+    SmartDashboard.putNumber("Adjusted Speed", adjustedSpeed);
     double range = bottomDistanceSensor.getRange();
     
     SmartDashboard.putNumber("Distance Sensor (Arm)", range);
@@ -83,7 +98,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     else motor.set(speed);
     */
-    motor.set(speed);
+    motor.set(adjustedSpeed);
   }
 
   public double getArmEncoderPosition() {

@@ -101,6 +101,13 @@ public class DriveSubsystem extends SubsystemBase implements RobotLifecycleCallb
   }
 
   public void arcadeDrive(double forward, double rotate) {
+    // If forward is 1 or -1, we want to slow down a bit so that we can still turn
+    if (forward + rotate > 1.0) {
+      forward = forward - rotate;
+    } else if (forward - rotate < -1.0) {
+      forward = forward + rotate;
+    }
+
     leftLeadMotor.set(TalonFXControlMode.PercentOutput, forward + rotate);
     rightLeadMotor.set(TalonFXControlMode.PercentOutput, forward - rotate);
   }

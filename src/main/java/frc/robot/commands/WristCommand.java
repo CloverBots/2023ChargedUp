@@ -13,8 +13,6 @@ import frc.robot.subsystems.WristSubsystem;
 public class WristCommand extends CommandBase {
   private final WristSubsystem wristSubsystem;
   private final DoubleSupplier rightJoystickY;
-  private final double APPROACH_MAX_SPEED = 0.2;
-  private final int APPROACH_ENCODER_LIMIT = 30;
 
   /** Creates a new LiftCommand. */
   public WristCommand(WristSubsystem wristSubsystem, DoubleSupplier rightJoystickY) {
@@ -39,16 +37,11 @@ public class WristCommand extends CommandBase {
 
     double wristSpeed = -rightJoystickY.getAsDouble() * .5; //negative because joystick Y gives negative value when pushing it forward
     
-    if (Math.abs(wristSpeed) > 0.05) {
+    if (Math.abs(wristSpeed) < 0.05) { //dead-zone to prevent drift
+      wristSpeed = 0;
+    }
 
-
-      if (wristSubsystem.getWristEncoderPosition() - WristSubsystem.LOWER_ENDPOINT < APPROACH_ENCODER_LIMIT
-          || WristSubsystem.UPPER_ENDPOINT - wristSubsystem.getWristEncoderPosition() < APPROACH_ENCODER_LIMIT) {
-        wristSpeed = Math.min(Math.max(wristSpeed, -APPROACH_MAX_SPEED), APPROACH_MAX_SPEED);
-      }
-      
-        wristSubsystem.setWristSpeed(wristSpeed);
-    } else wristSubsystem.setWristSpeed(0);
+    wristSubsystem.setWristSpeed(wristSpeed);
   } 
 
   // Called once the command ends or is interrupted.

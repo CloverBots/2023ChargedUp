@@ -26,7 +26,8 @@ public final class IDs {
   public static final int INTAKE_DEVICE = 9;
 
   // Telescope
-  public static final int TELESCOPE_DEVICE = 11;
+  public static final int TELESCOPE_DEVICE_LEAD = 11;
+  public static final int TELESCOPE_DEVICE_FOLLOW = 6;
 
   // Arm, Wrist
   public static final int ARM_DEVICE = 16;

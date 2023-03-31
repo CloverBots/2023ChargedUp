@@ -16,7 +16,8 @@ import frc.robot.VisionTargetTracker.LedMode;
 import frc.robot.commands.ArmCommand;
 import frc.robot.commands.AutoBalanceCommand;
 import frc.robot.commands.AutoScoreChargeCommand;
-import frc.robot.commands.AutoScoreExitCommand;
+import frc.robot.commands.AutoLeftScoreExitCommand;
+import frc.robot.commands.AutoRightScoreExitCommand;
 import frc.robot.commands.DriveFromControllerCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.IntakeToPositionCommand;
@@ -63,6 +64,10 @@ public class RobotContainer {
   private final WristCommand wristCommand = new WristCommand(wristSubsystem, operatorController::getRightY);
   private final TelescopeBypassSafetyCommand telescopeBypassSafetyCommand = new TelescopeBypassSafetyCommand(
       telescopeSubsystem);
+  private final TelescopeCommand telescopeInCommand = new TelescopeCommand(telescopeSubsystem, true, false);
+  private final TelescopeCommand telescopeOutCommand = new TelescopeCommand(telescopeSubsystem, false, true);
+  private final TelescopeCommand telescopeStopCommand = new TelescopeCommand(telescopeSubsystem, false, false);
+
 
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
   private final IntakeCommand intakeCommand = new IntakeCommand(intakeSubsystem,
@@ -70,38 +75,45 @@ public class RobotContainer {
 
   private final IntakeToPositionCommand intakeToHighPositionCommand = new IntakeToPositionCommand(armSubsystem,
       telescopeSubsystem, wristSubsystem,
-      64, 0.5, // 67
-      190, 1.0, // 190
+      64, 0.7, // 67
+      111, 0.8, // 190
       40, 0.3, // 40
       10, 3); // 10
 
   private final IntakeToPositionCommand intakeToMiddlePositionCommand = new IntakeToPositionCommand(armSubsystem,
       telescopeSubsystem, wristSubsystem,
       55, 0.5, // 55
-      53, 0.5, // 50
+      26, 0.5, // 50
       40, 1.0, // 30
       10, 3); // 5
 
   private final IntakeToPositionCommand intakeToHumanPositionCommand = new IntakeToPositionCommand(armSubsystem,
       telescopeSubsystem, wristSubsystem,
-      57, 0.5, // 65
+      55, 0.5, // 65
       0, 0.6, // 0
-      10, 0.3, // 0
-      10, 3); // 0
+      23, 0.3, // 0
+      23, 3); // 0
 
   private final IntakeToPositionCommand intakeToHomePositionCommand = new IntakeToPositionCommand(armSubsystem,
       telescopeSubsystem, wristSubsystem,
-      0, 0.3, // 0
+      10, 0.5, // 0
       0, 0.8, // 0
       0, 0.3, // 0
-      0, 3); // 0
+      0, 1); // 0
 
   private final IntakeToPositionCommand intakeToGroundPositionCommand = new IntakeToPositionCommand(armSubsystem,
       telescopeSubsystem, wristSubsystem,
-      30, 0.3, // 30
-      140, 1.0, // 140
+      30, 0.5, // 30
+      70, 0.8, // 140
       -30, 0.5, // -30
       15, 1); // 15
+
+  private final IntakeToPositionCommand intakeToRoombaPositionCommand = new IntakeToPositionCommand(armSubsystem,
+      telescopeSubsystem, wristSubsystem,
+      0, 0.5, //
+      0, 0.8, //
+      55, 0.5, // 
+      75, 2); //
 
   private final DriveFromControllerCommand driveFromController = new DriveFromControllerCommand(
       driveSubsystem,
@@ -143,10 +155,12 @@ public class RobotContainer {
     balance.whileTrue(new AutoBalanceCommand(driveSubsystem));
 
     JoystickButton telescopeInButton = new JoystickButton(operatorController, Button.kRightBumper.value);
-    telescopeInButton.whileTrue(new TelescopeCommand(telescopeSubsystem, true, false));
+    telescopeInButton.onTrue(telescopeInCommand);
+    telescopeInButton.onFalse(telescopeStopCommand);
 
     JoystickButton telescopeOutButton = new JoystickButton(operatorController, Button.kLeftBumper.value);
-    telescopeOutButton.whileTrue(new TelescopeCommand(telescopeSubsystem, false, true));
+    telescopeOutButton.onTrue(telescopeOutCommand);
+    telescopeOutButton.onFalse(telescopeStopCommand);
 
     // JoystickButton driveToCollisionButton = new JoystickButton(driverController,
     // XboxController.Button.kY.value);
@@ -171,6 +185,9 @@ public class RobotContainer {
     POVButton intakeToPositionHomeButton = new POVButton(operatorController, 180); // Down
     intakeToPositionHomeButton.onTrue(intakeToHomePositionCommand);
 
+    POVButton intakeToPositionRoombaButton = new POVButton(operatorController, 0); // Down
+    intakeToPositionRoombaButton.onTrue(intakeToRoombaPositionCommand);
+
     JoystickButton intakeToPositionGroundButton = new JoystickButton(operatorController,
         XboxController.Button.kA.value);
     intakeToPositionGroundButton.onTrue(intakeToGroundPositionCommand);
@@ -182,24 +199,48 @@ public class RobotContainer {
 
   }
 
+  public static double calculateAdjustedMotorSpeed(
+    double currentPosition,
+    double upper,
+    double lower,
+    double margin,
+    double currentPower,
+    double powerAtEndpoint) {
+    if (Math.abs(currentPower) <= powerAtEndpoint) return currentPower;
+    powerAtEndpoint = Math.copySign(powerAtEndpoint, currentPower);
+    double coefficient = (powerAtEndpoint - currentPower) / Math.pow(margin, 2);
+    if (currentPosition >= lower && currentPosition <= lower + margin) {
+      return coefficient * Math.pow(currentPosition - (lower + margin), 2) + currentPower;
+    }
+    else if (currentPosition >= upper-margin && currentPosition <= upper) {
+      return coefficient * Math.pow(currentPosition - (upper - margin), 2) + currentPower;
+    }
+    else return currentPower;
+  }
+
   private void configureChooserModes() {
 
     SmartDashboard.putData("Autonomous Mode", chooser);
     SmartDashboard.putNumber("Auto Wait Time", 0);
 
-    chooser.addOption("AutoScoreChargeCommand", new AutoScoreChargeCommand(
+    chooser.setDefaultOption("AutoScoreChargeCommand", new AutoScoreChargeCommand(
         armSubsystem,
         driveSubsystem,
         intakeSubsystem,
         telescopeSubsystem,
         wristSubsystem));
-    chooser.setDefaultOption("AutoScoreExitCommand", new AutoScoreExitCommand(
+    chooser.addOption("AutoScoreSpinExitCommand", new AutoLeftScoreExitCommand(
         armSubsystem,
         driveSubsystem,
         intakeSubsystem,
         telescopeSubsystem,
         wristSubsystem));
-
+    chooser.addOption("AutoScoreExitCommand", new AutoRightScoreExitCommand(
+        armSubsystem,
+        driveSubsystem,
+        intakeSubsystem,
+        telescopeSubsystem,
+        wristSubsystem));
   }
 
   /**

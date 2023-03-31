@@ -12,25 +12,34 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.IDs;
+import frc.robot.RobotContainer;
 
 public class TelescopeSubsystem extends SubsystemBase {
-  private final int CURRENT_LIMIT = 10;
+  private final int CURRENT_LIMIT = 15;
 
-  private final CANSparkMax motor = new CANSparkMax(IDs.TELESCOPE_DEVICE, MotorType.kBrushless);
+  private final CANSparkMax leadMotor = new CANSparkMax(IDs.TELESCOPE_DEVICE_LEAD, MotorType.kBrushless);
+  private final CANSparkMax followMotor = new CANSparkMax(IDs.TELESCOPE_DEVICE_FOLLOW, MotorType.kBrushless);
 
   public static final double LOWER_ENDPOINT = 2; // 0, (slightly above 0 to prevent overshoot)
 
-  public static final double UPPER_ENDPOINT = 230; // 236
+  public static final double UPPER_ENDPOINT = 112; // 236
 
+  private static final double MARGIN = 15;
+
+  private double adjustedSpeed = 0;
   /**
    * Constructs a new {@link TelescopeSubsystem} instance.
    */
   public TelescopeSubsystem() {
-    motor.setSmartCurrentLimit(CURRENT_LIMIT);
+    leadMotor.setSmartCurrentLimit(CURRENT_LIMIT);
+    leadMotor.setIdleMode(IdleMode.kBrake);
+    leadMotor.setInverted(false);
 
-    motor.setIdleMode(IdleMode.kBrake);
+    followMotor.setSmartCurrentLimit(CURRENT_LIMIT);
+    followMotor.setIdleMode(IdleMode.kBrake);
+    followMotor.setInverted(false);
 
-    motor.setInverted(false);
+    followMotor.follow(leadMotor);
 
     // setTelescopeMaximumPosition(LOWER_ENDPOINT, UPPER_ENDPOINT);
   }
@@ -47,20 +56,35 @@ public class TelescopeSubsystem extends SubsystemBase {
       }
     }
     
-    motor.set(speed);
+    adjustedSpeed = RobotContainer.calculateAdjustedMotorSpeed(
+      getTelescopeEncoderPosition(),
+      UPPER_ENDPOINT,
+      LOWER_ENDPOINT,
+      MARGIN,
+      speed,
+      0.1
+    );
+    leadMotor.set(adjustedSpeed);
   }
 
   public double getTelescopeEncoderPosition() {
-    return motor.getEncoder().getPosition(); // negative because motor flipped
+    return leadMotor.getEncoder().getPosition(); // negative because motor flipped
   }
 
   public void setTelescopeMaximumPosition(double min, double max) {
-    motor.setSoftLimit(SoftLimitDirection.kForward, (float) max);
-    motor.setSoftLimit(SoftLimitDirection.kReverse, (float) min);
+    leadMotor.setSoftLimit(SoftLimitDirection.kForward, (float) max);
+    leadMotor.setSoftLimit(SoftLimitDirection.kReverse, (float) min);
   }
 
   public void resetEncoder() {
-    motor.getEncoder().setPosition(0);
+    leadMotor.getEncoder().setPosition(0);
   }
 
+  @Override
+  public void periodic() {
+    if ((getTelescopeEncoderPosition() <= LOWER_ENDPOINT && adjustedSpeed < 0) ||
+    (getTelescopeEncoderPosition() >= UPPER_ENDPOINT && adjustedSpeed > 0)) {
+      leadMotor.set(0);
+}
+  }
 }

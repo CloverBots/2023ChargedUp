@@ -16,7 +16,7 @@ public class DriveFromControllerCommand extends CommandBase {
   private static final double SLOW_ROTATION_RATIO = .3;
   private static final double SLOW_ROTATION_CURVE = 2;
 
-  private static final double DEFAULT_FOWARD_RATIO = 0.7;//0.7  smaller = less power
+  private static final double DEFAULT_FOWARD_RATIO = 1.0;//0.7  smaller = less power
   private static final double DEFAULT_FORWARD_CURVE = 3; //1.5 larger = more controll at small joystick values
   private static final double DEFAULT_ROTATION_RATIO = 0.6; //0.6
   private static final double DEFAULT_ROTATION_CURVE = 3; //2
@@ -75,9 +75,8 @@ public class DriveFromControllerCommand extends CommandBase {
       rotationCurve = SLOW_ROTATION_CURVE;
     }
     SmartDashboard.putNumber("drive encoder", driveSubsystem.getAverageEncoderPosition());
-    if (fullSpeedTrigger.getAsDouble() > .3) {
-      forwardRatio = 1.0;
-    }
+    SmartDashboard.putNumber("heading", driveSubsystem.navXGyro.getHeading());
+    
     driveSubsystem.arcadeDrive(
         computeInputCurve(forwardRatio * forward.getAsDouble(), forwardCurve),
         computeInputCurve(rotationRatio * rotation.getAsDouble(), rotationCurve));
