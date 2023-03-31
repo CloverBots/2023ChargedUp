@@ -61,10 +61,10 @@ public class DriveToBalanceCommand extends CommandBase {
     public boolean isFinished() {
         currentRoll = gyro.getRoll();
         double distanceTraveled = driveSubsystem.getAverageEncoderPosition();
-        if (Math.abs(distanceTraveled) >= Math.abs(distance)) {
-            System.out.println("Finishing due to distance");
-            return true;
-        } else if (Math.abs(currentRoll - initialRoll) > 5){
+        //if (Math.abs(distanceTraveled) >= Math.abs(distance)) {
+        //    System.out.println("Finishing due to distance");
+        //    return true;
+        if (Math.abs(currentRoll - initialRoll) > 5){
             System.out.println("Finishing due to roll");
             return true;
         } else {

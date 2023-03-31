@@ -229,13 +229,13 @@ public class RobotContainer {
         intakeSubsystem,
         telescopeSubsystem,
         wristSubsystem));
-    chooser.addOption("AutoLeftScoreExitCommand", new AutoLeftScoreExitCommand(
+    chooser.addOption("AutoScoreSpinExitCommand", new AutoLeftScoreExitCommand(
         armSubsystem,
         driveSubsystem,
         intakeSubsystem,
         telescopeSubsystem,
         wristSubsystem));
-    chooser.addOption("AutoRightScoreExitCommand", new AutoRightScoreExitCommand(
+    chooser.addOption("AutoScoreExitCommand", new AutoRightScoreExitCommand(
         armSubsystem,
         driveSubsystem,
         intakeSubsystem,
