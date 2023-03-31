@@ -1,5 +1,8 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.SequentialCommandGroupExtended;
 import frc.robot.subsystems.ArmSubsystem;
@@ -27,18 +30,23 @@ public class AutoRightScoreExitCommand extends SequentialCommandGroupExtended {
         190, 1.0, // 190
         40, 0.3, // 40
         10, 3)); // 10
-
     addInstant(() -> intakeSubsystem.setIntakeSpeed(-0.2), intakeSubsystem);
     addCommands(new WaitCommand(0.5)); // 1 second
     addInstant(() -> intakeSubsystem.setIntakeSpeed(0), intakeSubsystem);
-
+    
     addCommands(new IntakeToPositionCommand(armSubsystem, telescopeSubsystem, wristSubsystem,
         0, 0.5, // 0
         0, 1.0, // 0
         0, 0.3, // 0
-        0, 3)); // 0)
-  
-    addCommands(new DriveToDistanceCommand(driveSubsystem, DISTANCE, DRIVE_SPEED, 0, 0.1));
+        0, 3) // 0)
+      .alongWith(
+        new WaitCommand(0.5)
+        .andThen(
+          new DriveToDistanceCommand(driveSubsystem, DISTANCE, DRIVE_SPEED, 0, 0.1)
+          )
+      ));
+    
+    //addCommands(new DriveToDistanceCommand(driveSubsystem, DISTANCE, DRIVE_SPEED, 0, 0.1));
     
   }
 }
