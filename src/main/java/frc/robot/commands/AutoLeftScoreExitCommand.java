@@ -43,18 +43,20 @@ public class AutoLeftScoreExitCommand extends SequentialCommandGroupExtended {
         new DriveToDistanceCommand(driveSubsystem, DISTANCE, DRIVE_SPEED, 0, 0.1)
       )
     ));    
-
-    addCommands(new SpinToAngleCommand(driveSubsystem, -155, -.2));
+    
     addInstant(() -> intakeSubsystem.setIntakeSpeed(1), intakeSubsystem);
-    addCommands(
-      new IntakeToPositionCommand(armSubsystem,
-      telescopeSubsystem, wristSubsystem,
-      0, 0.5, //
-      0, 0.8, //
-      55, 0.5, // 
-      75, 2) //
-    );
 
+    addCommands(new SpinToAngleCommand(driveSubsystem, -155, -.2)
+      .alongWith(
+        new IntakeToPositionCommand(armSubsystem,
+        telescopeSubsystem, wristSubsystem,
+          0, 0.5, //
+          0, 0.8, //
+          55, 0.5, // 
+          75, 2) //
+      )
+    );
+    
     addCommands(new DriveToDistanceCommand(driveSubsystem, 0.9, 0.2, 0, 0.1));
     addInstant(() -> intakeSubsystem.setIntakeSpeed(0), intakeSubsystem);
     addCommands(new IntakeToPositionCommand(armSubsystem,
