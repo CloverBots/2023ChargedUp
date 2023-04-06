@@ -16,6 +16,7 @@ import frc.robot.VisionTargetTracker.LedMode;
 import frc.robot.commands.ArmCommand;
 import frc.robot.commands.AutoBalanceCommand;
 import frc.robot.commands.AutoScoreChargeCommand;
+import frc.robot.commands.AutoScoreExitNoSpin;
 import frc.robot.commands.AutoLeftScoreExitCommand;
 import frc.robot.commands.AutoRightScoreExitCommand;
 import frc.robot.commands.DriveFromControllerCommand;
@@ -230,13 +231,19 @@ public class RobotContainer {
         intakeSubsystem,
         telescopeSubsystem,
         wristSubsystem));
-    chooser.addOption("AutoScoreSpinExitCommand", new AutoLeftScoreExitCommand(
+    chooser.addOption("AutoScoreSpinBlueCommand", new AutoLeftScoreExitCommand(
         armSubsystem,
         driveSubsystem,
         intakeSubsystem,
         telescopeSubsystem,
         wristSubsystem));
-    chooser.addOption("AutoScoreExitCommand", new AutoRightScoreExitCommand(
+    chooser.addOption("AutoScoreSpinRedCommand", new AutoRightScoreExitCommand(
+        armSubsystem,
+        driveSubsystem,
+        intakeSubsystem,
+        telescopeSubsystem,
+        wristSubsystem));
+    chooser.addOption("AutoScoreExitCommand", new AutoScoreExitNoSpin(
         armSubsystem,
         driveSubsystem,
         intakeSubsystem,
