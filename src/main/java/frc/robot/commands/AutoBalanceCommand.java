@@ -14,7 +14,7 @@ public class AutoBalanceCommand extends CommandBase {
     private double error;
     private double currentAngle;
     private double drivePower;
-
+    private NewAutoBalance balancer;
     /**
      * Command to use Gyro data to resist the tip angle from the beam - to stabalize
      * and balanace
@@ -22,6 +22,8 @@ public class AutoBalanceCommand extends CommandBase {
     public AutoBalanceCommand(DriveSubsystem drive) {
         driveSubsystem = drive;
         gyro = driveSubsystem.navXGyro;
+        
+        balancer = new NewAutoBalance(drive.navXGyro);
 
         // this.m_DriveSubsystem = Robot.m_driveSubsystem;
         // addRequirements(m_DriveSubsystem);
@@ -35,25 +37,29 @@ public class AutoBalanceCommand extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
+
+
+
         // Uncomment the line below this to simulate the gyroscope axis with a
         // controller joystick
         // Double currentAngle = -1 *
         // Robot.controller.getRawAxis(IDs.LEFT_VERTICAL_JOYSTICK_AXIS) * 45;
-        this.currentAngle = gyro.getRoll();
+        // this.currentAngle = gyro.getRoll();
 
-        error = IDs.BEAM_BALANCED_GOAL_DEGREES - currentAngle;
-        drivePower = -Math.min(IDs.BEAM_BALANACED_DRIVE_KP * error, 1);
+        // error = IDs.BEAM_BALANCED_GOAL_DEGREES - currentAngle;
+        // drivePower = -Math.min(IDs.BEAM_BALANACED_DRIVE_KP * error, 1);
 
-        // Our robot needed an extra push to drive up in reverse, probably due to weight
-        // imbalances (not anymore)
+        // // Our robot needed an extra push to drive up in reverse, probably due to weight
+        // // imbalances (not anymore)
         
-        drivePower *= IDs.BACKWARDS_BALANCING_EXTRA_POWER_MULTIPLIER;
+        // drivePower *= IDs.BACKWARDS_BALANCING_EXTRA_POWER_MULTIPLIER;
         
 
-        // Limit the max power
-        if (Math.abs(drivePower) > 0.4) {
-            drivePower = Math.copySign(0.4, drivePower);
-        }
+        // // Limit the max power
+        // if (Math.abs(drivePower) > 0.4) {
+        //     drivePower = Math.copySign(0.4, drivePower);
+        // }
+        drivePower = balancer.autoBalanceRoutine();
         SmartDashboard.putNumber("Auto Balance Drive Power", drivePower);
         driveSubsystem.autoDrive(drivePower, 0);
     }
@@ -67,7 +73,8 @@ public class AutoBalanceCommand extends CommandBase {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return Math.abs(error) < IDs.BEAM_BALANCED_ANGLE_THRESHOLD_DEGREES; // End the command when we are within the
+        return false;
+        //return Math.abs(error) < IDs.BEAM_BALANCED_ANGLE_THRESHOLD_DEGREES; // End the command when we are within the
                                                                             // specified threshold of being 'flat'
                                                                             // (gyroscope pitch of 0 degrees)
     }
