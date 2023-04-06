@@ -219,7 +219,8 @@ public class RobotContainer {
   }
 
   private void configureChooserModes() {
-
+    SmartDashboard.putNumber("drive rotate kP", DriveSubsystem.DRIVEROTATE_PID_P);
+    SmartDashboard.putNumber("drive rotate kD", DriveSubsystem.DRIVEROTATE_PID_D);
     SmartDashboard.putData("Autonomous Mode", chooser);
     SmartDashboard.putNumber("Auto Wait Time", 0);
 
