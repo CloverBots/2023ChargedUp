@@ -21,6 +21,10 @@ public class NavXGyro {
         return ahrs.getRoll();
     }
 
+    public double getPitch() {
+        return ahrs.getPitch();
+    }
+
     public void reset() {
         ahrs.reset();
     }

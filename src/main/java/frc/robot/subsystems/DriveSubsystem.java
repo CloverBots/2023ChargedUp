@@ -98,6 +98,8 @@ public class DriveSubsystem extends SubsystemBase implements RobotLifecycleCallb
   @Override
   public void periodic() {
     SmartDashboard.putNumber("heading", navXGyro.getHeading());
+    SmartDashboard.putNumber("pitch", navXGyro.getPitch());
+    SmartDashboard.putNumber("roll", navXGyro.getRoll());
   }
 
   public void arcadeDrive(double forward, double rotate) {

@@ -28,12 +28,12 @@ public class NewAutoBalance {
          * CONFIG *
          **********/
         // Speed the robot drived while scoring/approaching station, default = 0.4
-        robotSpeedFast = 0.6;
+        robotSpeedFast = 0.3;
 
         // Speed the robot drives while balancing itself on the charge station.
         // Should be roughly half the fast speed, to make the robot more accurate,
         // default = 0.2
-        robotSpeedSlow = 0.3;
+        robotSpeedSlow = 0.15;
 
         // Angle where the robot knows it is on the charge station, default = 13.0
         onChargeStationDegree = 13.0;
@@ -75,8 +75,13 @@ public class NewAutoBalance {
     // returns the magnititude of the robot's tilt calculated by the root of
     // pitch^2 + roll^2, used to compensate for diagonally mounted rio
     public double getTilt() {
-        System.out.println(gyro.getRoll());
-        return gyro.getRoll();
+        double pitch = getPitch();
+        double roll = getRoll();
+        if ((pitch + roll) >= 0) {
+            return Math.sqrt(pitch * pitch + roll * roll);
+        } else {
+            return -Math.sqrt(pitch * pitch + roll * roll);
+        }
     }
 
     public int secondsToTicks(double time) {
