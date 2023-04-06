@@ -44,7 +44,7 @@ public class AutoScoreChargeCommand extends SequentialCommandGroupExtended {
     //     0, 3)); // 0)
 
     // addCommands(new DriveToDistanceCommand(driveSubsystem, DISTANCE, DRIVE_SPEED, 0, 0.1));
-    addCommands(new DriveToBalanceCommand(driveSubsystem, BALANCE_DISTANCE, BALANCE_SPEED));
+    addCommands(new AutoBalanceCommand(driveSubsystem));
     // addCommands(new WaitCommand(1));
     // addCommands(new DriveToDistanceCommand(driveSubsystem, BACKUP_DISTANCE, BACKUP_SPEED, 0, 0.01));
   }

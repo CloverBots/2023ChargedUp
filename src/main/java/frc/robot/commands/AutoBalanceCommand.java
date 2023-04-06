@@ -23,7 +23,7 @@ public class AutoBalanceCommand extends CommandBase {
         driveSubsystem = drive;
         gyro = driveSubsystem.navXGyro;
         
-        balancer = new NewAutoBalance(drive.navXGyro);
+        balancer = new NewAutoBalance(drive.navXGyro::getPitch);
 
         // this.m_DriveSubsystem = Robot.m_driveSubsystem;
         // addRequirements(m_DriveSubsystem);

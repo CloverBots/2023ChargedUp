@@ -1,5 +1,7 @@
 package frc.robot.commands;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.NavXGyro;
@@ -17,12 +19,13 @@ public class NewAutoBalance {
     private double scoringBackUpTime;
     private double doubleTapTime;
 
-    private NavXGyro gyro;
+    private DoubleSupplier gyro;
 
-    public NewAutoBalance(NavXGyro gyro) {
+    public NewAutoBalance(DoubleSupplier rol) {
         mRioAccel = new BuiltInAccelerometer();
         state = 0;
         debounceCount = 0;
+        gyro = rol;
 
         /**********
          * CONFIG *
@@ -75,13 +78,9 @@ public class NewAutoBalance {
     // returns the magnititude of the robot's tilt calculated by the root of
     // pitch^2 + roll^2, used to compensate for diagonally mounted rio
     public double getTilt() {
-        double pitch = getPitch();
-        double roll = getRoll();
-        if ((pitch + roll) >= 0) {
-            return Math.sqrt(pitch * pitch + roll * roll);
-        } else {
-            return -Math.sqrt(pitch * pitch + roll * roll);
-        }
+
+        return gyro.getAsDouble();
+        
     }
 
     public int secondsToTicks(double time) {
