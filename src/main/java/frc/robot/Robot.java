@@ -31,7 +31,7 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
     // used for sending webcam (plugged directly into RoboRio usb port)
     // images directly to the SmartDashboard (View menu, Add..., CameraServer Stream Viewer)
-    CameraServer.startAutomaticCapture();
+    //CameraServer.startAutomaticCapture();
   }
 
   /**

@@ -20,7 +20,6 @@ public class AutoRightScoreExitCommand extends SequentialCommandGroupExtended {
       TelescopeSubsystem telescopeSubsystem,
       WristSubsystem wristSubsystem) {
 
-        
     addCommands(new IntakeToPositionCommand(armSubsystem, telescopeSubsystem,
         wristSubsystem,
         64, 0.5, // 67

@@ -41,16 +41,16 @@ import frc.robot.subsystems.WristSubsystem;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  private static final double VISION_TARGET_HEIGHT = 34; // inches
-  private static final double CAMERA_HEIGHT = 21.25;
-  private static final double CAMERA_PITCH = 0; // degrees
+  //private static final double VISION_TARGET_HEIGHT = 34; // inches
+  //private static final double CAMERA_HEIGHT = 21.25;
+  //private static final double CAMERA_PITCH = 0; // degrees
 
-  private final VisionConfiguration visionConfiguration = new VisionConfiguration(
-      VISION_TARGET_HEIGHT,
-      CAMERA_HEIGHT,
-      CAMERA_PITCH);
+  //private final VisionConfiguration visionConfiguration = new VisionConfiguration(
+  //    VISION_TARGET_HEIGHT,
+  //    CAMERA_HEIGHT,
+  //    CAMERA_PITCH);
 
-  private final VisionTargetTracker visionTargetTracker = new VisionTargetTracker(visionConfiguration);
+  //private final VisionTargetTracker visionTargetTracker = new VisionTargetTracker(visionConfiguration);
 
   private final XboxController driverController = new XboxController(IDs.CONTROLLER_DRIVE_PORT);
   private final XboxController operatorController = new XboxController(IDs.CONTROLLER_OPERATOR_PORT);
@@ -134,7 +134,7 @@ public class RobotContainer {
     configureTriggerBindings();
     configureChooserModes();
 
-    visionTargetTracker.setLedMode(LedMode.FORCE_ON);
+    //visionTargetTracker.setLedMode(LedMode.FORCE_ON);
 
     SmartDashboard.putNumber("Auto Distance Inches", 270);
   }
