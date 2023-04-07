@@ -43,7 +43,7 @@ public class AutoLeftScoreExitCommand extends SequentialCommandGroupExtended {
       )
     ));    
 
-    addCommands(new SpinToAngleCommand(driveSubsystem, -155, -.2));
+    addCommands(new SpinToAngleCommand(driveSubsystem, -160, -.2));
     addInstant(() -> intakeSubsystem.setIntakeSpeed(1), intakeSubsystem);
     addCommands(
       new IntakeToPositionCommand(armSubsystem,

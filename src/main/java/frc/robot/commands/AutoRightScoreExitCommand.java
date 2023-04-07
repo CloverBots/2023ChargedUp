@@ -47,7 +47,7 @@ public class AutoRightScoreExitCommand extends SequentialCommandGroupExtended {
 
     //addCommands(new DriveToDistanceCommand(driveSubsystem, DISTANCE, DRIVE_SPEED, 0, 0.1));
     
-    addCommands(new SpinToAngleCommand(driveSubsystem, 155, -.2));
+    addCommands(new SpinToAngleCommand(driveSubsystem, 160, -.2));
     addInstant(() -> intakeSubsystem.setIntakeSpeed(1), intakeSubsystem);
     addCommands(
       new IntakeToPositionCommand(armSubsystem,
